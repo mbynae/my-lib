@@ -3,7 +3,7 @@ import { createContext, memo, useContext, useMemo } from 'react';
 import ComboboxUI from './combo/ComboBoxUI';
 import styles from './comboEvent.module.css';
 
-import { formComboProps, type ComboContextType, type ComboGroupProps, type ComboOptionProps } from './formType';
+import { formComboProps, type ComboContextType, type ComboGroupProps, type ComboOptionProps } from './form-type';
 
 const Context = createContext<ComboContextType<'radio'>>({
     UIType: undefined,

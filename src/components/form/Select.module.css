@@ -1,0 +1,54 @@
+.label {
+    border: 1px solid var(--main-color);
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.activeInput {
+    display: none;
+}
+.input {
+    padding: 0;
+    margin: 0;
+    border: none;
+    pointer-events: none;
+    font-size: 1rem;
+}
+.input:focus {
+    outline: none;
+}
+
+.arrow {
+    width: 0.8125rem; /* 13px to rem */
+    height: 0.8125rem; /* 13px to rem */
+    background-image: url('/src/assets/arrow.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    translate: 0 1px;
+}
+
+.label:has(.activeInput:checked) .arrow {
+    rotate: 180deg;
+}
+
+.optionBox {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: calc(100% + 5px);
+    border: 1px solid var(--main-color);
+    border-radius: 5px;
+}
+
+.option {
+    padding: 5px 10px;
+}
+.option:hover {
+    background-color: var(--main-color-thin);
+}

@@ -2,7 +2,7 @@ import { HTMLProps } from 'react';
 
 export interface ComboGroupProps<T extends 'checkbox' | 'radio'> extends OptionProps, HTMLProps<HTMLDivElement> {
     children: React.ReactNode;
-    state: T extends 'radio' ? string : string[];
+    state?: T extends 'radio' ? string : string[];
     name?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     UIType?: UIType;

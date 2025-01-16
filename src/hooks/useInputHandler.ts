@@ -65,6 +65,7 @@ export const useBooleanHandler = <T extends boolean | object>(initialState: Bool
             const eventTarget = event.target as HTMLInputElement;
 
             if (typeof initialState === 'boolean') {
+                console.log(eventTarget.value);
                 return setState(!eventTarget.value as typeof initialState);
             }
 
@@ -100,7 +101,7 @@ export const useCheckboxHandler = (initialState: string[]) => {
         setState(event as typeof initialState | ((prev: typeof state) => typeof state));
     }; //개별 체크박스 onChange 핸들러
 
-    const onAllCheck = (data: string[]) => () => {
+    const onAllCheck = (data: string[]) => {
         //전체 체크 상태일 시 전체 해제
         if (Eq.arrEqCheck(data, state)) {
             const setData = new Set(data);

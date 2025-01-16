@@ -1,0 +1,35 @@
+/* default */
+.defaultType {
+    width: 100%;
+    border: 1px solid var(--main-color);
+    background-color: var(--main-color);
+    color: #fff;
+    padding: 6px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.defaultType:hover {
+    background-color: var(--main-color-hover);
+}
+
+/* outline */
+.outlineType {
+    width: 100%;
+    border: 1px solid var(--main-color);
+    color: var(--font-color);
+    padding: 6px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.outlineType:hover {
+    background-color: var(--main-color-thin);
+}
+
+/* text */
+.textType {
+    font-size: '1rem';
+}

@@ -1,7 +1,7 @@
 import ComboButton from './ComboButton';
 import ComboDefault from './ComboDefault';
 
-import type { ComboOptionProps } from '../formType';
+import type { ComboOptionProps } from '../form-type';
 
 const ComboboxUI = ({ UIType, children, ...props }: ComboOptionProps) => {
     if (UIType === 'button') {

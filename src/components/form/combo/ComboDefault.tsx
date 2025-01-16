@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import styles from './ComboDefault.module.css';
 
-import type { ComboOptionProps } from '../formType';
+import type { ComboOptionProps } from '../form-type';
 
 const ComboDefault = ({ children, type, ...props }: Omit<ComboOptionProps, 'UIType'>) => {
     const { labelProps, childrenProps, circleProps, ...inputProps } = props;

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import styles from './ComboButton.module.css';
-import { ComboOptionProps } from '../formType';
+
+import type { ComboOptionProps } from '../form-type';
 
 const ComboButton = ({ children, type, ...props }: Omit<ComboOptionProps, 'UIType'>) => {
     const { labelProps, childrenProps, ...inputProps } = props;

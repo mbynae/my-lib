@@ -19,7 +19,7 @@
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background-color: #589cec;
+    background-color: var(--main-color);
     position: absolute;
     left: 50%;
     top: 50%;
@@ -33,10 +33,10 @@
 }
 
 .defaultLabel:has(.defaultInput:disabled) {
-    color: #cdcdcd;
+    color: var(--disabled-color);
 }
 .defaultLabel:has(.defaultInput:disabled) .defaultCircle::after {
-    background-color: #cdcdcd;
+    background-color: var(--disabled-color);
 }
 
 .defaultInput {

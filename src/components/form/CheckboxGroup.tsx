@@ -4,7 +4,7 @@ import { Eq } from '../../function/eq';
 import ComboboxUI from './combo/ComboBoxUI';
 import styles from './comboEvent.module.css';
 
-import { formComboProps, type ComboContextType, type ComboGroupProps, type ComboOptionProps } from './formType';
+import { formComboProps, type ComboContextType, type ComboGroupProps, type ComboOptionProps } from './form-type';
 
 const Context = createContext<ComboContextType<'checkbox'>>({
     UIType: undefined,
