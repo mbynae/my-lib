@@ -65,8 +65,7 @@ export const useBooleanHandler = <T extends boolean | object>(initialState: Bool
             const eventTarget = event.target as HTMLInputElement;
 
             if (typeof initialState === 'boolean') {
-                console.log(eventTarget.value);
-                return setState(!eventTarget.value as typeof initialState);
+                return setState(prev => !prev as typeof initialState);
             }
 
             if (typeof initialState === 'object') {
