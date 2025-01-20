@@ -1,0 +1,187 @@
+/* default */
+.defaultBox {
+    min-width: 400px;
+    min-height: 200px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 8px 2px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    border: 1px solid #666;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.defaultInner {
+    width: 100%;
+    height: 100%;
+}
+.defaultContents {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* notice */
+.noticeBox {
+    background-color: #fff;
+    border-radius: 5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    overflow: hidden;
+    box-shadow: 1px 1px 8px 2px rgba(0, 0, 0, 0.2);
+}
+.noticeHeader {
+    height: 50px;
+    background-color: #333333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    padding: 0 15px 0 20px;
+}
+.noticeHeader .noticeTitle {
+    font-size: 1.1rem;
+}
+.noticeContents {
+    min-width: 300px;
+    min-height: 200px;
+    width: 100%;
+    padding-top: 15px;
+    padding-right: 2px;
+}
+.noticeInner {
+    padding-left: 20px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+.noticeInner::-webkit-scrollbar {
+    width: 7px;
+}
+.noticeInner::-webkit-scrollbar-thumb {
+    background-color: #cdcdcd;
+    border-radius: 10px;
+}
+.noticeInner::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(0, 0%, 85%);
+}
+.noticeBottom {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* download */
+.downloadBox {
+    background-color: #fff;
+    border-radius: 5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    overflow: hidden;
+    box-shadow: 1px 1px 8px 2px rgba(0, 0, 0, 0.2);
+}
+.downloadHeader {
+    height: 50px;
+    border-bottom: 1px solid #cdcdcd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 20px;
+    padding: 30px 0 20px 0;
+}
+.downloadHeader .downloadTitle {
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+.downloadContents {
+    min-width: 600px;
+    min-height: 200px;
+    width: 100%;
+    padding-top: 15px;
+    padding-right: 2px;
+}
+.downloadInner {
+    padding-left: 20px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+.downloadInner::-webkit-scrollbar {
+    width: 7px;
+}
+.downloadInner::-webkit-scrollbar-thumb {
+    background-color: #cdcdcd;
+    border-radius: 10px;
+}
+.downloadInner::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(0, 0%, 85%);
+}
+.downloadBottom {
+    width: 100%;
+    height: 80px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.downloadBottom > button {
+    border-radius: 8px;
+}
+
+/* common */
+.closeButtonBox {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.closeButton {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    cursor: pointer;
+}
+.closeButton::before {
+    content: '';
+    width: 100%;
+    height: 1px;
+    background-color: #303030;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    rotate: 45deg;
+}
+.closeButton::after {
+    content: '';
+    width: 100%;
+    height: 1px;
+    background-color: #303030;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    rotate: -45deg;
+}
+
+.noticeBox .closeButton::before {
+    background-color: #fff;
+}
+.noticeBox .closeButton::after {
+    background-color: #fff;
+}

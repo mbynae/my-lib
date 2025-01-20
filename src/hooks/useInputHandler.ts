@@ -69,10 +69,18 @@ export const useBooleanHandler = <T extends boolean | object>(initialState: Bool
             }
 
             if (typeof initialState === 'object') {
-                const { name } = eventTarget;
+                const { name, dataset } = eventTarget;
 
-                if (!initNameKeys!.find(key => key === name)) throw Error(`initialState와 일치하는 input.name = ${name} 이 없습니다.`);
-                return setState(prev => ({ ...(prev as typeof state & object), [name]: !(prev as Record<typeof name, boolean>)[name] }));
+                const targetName = name ?? dataset.name;
+
+                if (!initNameKeys!.find(key => key === targetName)) {
+                    throw Error(`initialState와 일치하는 input.name = ${targetName} 이 없습니다.`);
+                }
+
+                return setState(prev => ({
+                    ...(prev as typeof state & object),
+                    [targetName]: !(prev as Record<typeof targetName, boolean>)[targetName],
+                }));
             }
         }
 

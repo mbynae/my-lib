@@ -1,0 +1,23 @@
+.modalContents {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    min-width: 500px;
+    min-height: 250px;
+    width: 100%;
+    height: 100%;
+}
+.modalContents > h6 {
+    font-size: 20px;
+}
+
+.modalRadio {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+}
+.modalRadioOption {
+    width: 49%;
+}
