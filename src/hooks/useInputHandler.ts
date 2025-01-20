@@ -15,6 +15,7 @@ export const useInputHandler = <T extends string | object>(initialState: InputSt
             | ((prev: typeof state) => typeof state)
             | React.ChangeEvent<HTMLInputElement>
             | React.ChangeEvent<HTMLTextAreaElement>
+            | React.ChangeEvent<HTMLSelectElement>,
     ) => {
         if (typeof event === 'undefined') {
             return setState(initialState);
@@ -33,8 +34,8 @@ export const useInputHandler = <T extends string | object>(initialState: InputSt
             if (typeof initialState === 'object') {
                 const { value, name } = event.target;
 
-                if (!initNameKeys!.find(key => key === name)) throw Error(`initialState와 일치하는 input.name = ${name} 이 없습니다.`);
-                return setState(prev => ({ ...(prev as typeof initialState), [name]: value }));
+                if (!initNameKeys!.find((key) => key === name)) throw Error(`initialState와 일치하는 input.name = ${name} 이 없습니다.`);
+                return setState((prev) => ({ ...(prev as typeof initialState), [name]: value }));
             }
         }
 
@@ -55,7 +56,7 @@ export const useBooleanHandler = <T extends boolean | object>(initialState: Bool
             | typeof initialState
             | ((prev: typeof state) => typeof state)
             | React.ChangeEvent<HTMLInputElement>
-            | React.MouseEvent<HTMLElement>
+            | React.MouseEvent<HTMLElement>,
     ) => {
         if (typeof event === 'undefined') {
             return setState(initialState);
@@ -65,14 +66,14 @@ export const useBooleanHandler = <T extends boolean | object>(initialState: Bool
             const eventTarget = event.target as HTMLInputElement;
 
             if (typeof initialState === 'boolean') {
-                return setState(prev => !prev as typeof initialState);
+                return setState((prev) => !prev as typeof initialState);
             }
 
             if (typeof initialState === 'object') {
                 const { name } = eventTarget;
 
-                if (!initNameKeys!.find(key => key === name)) throw Error(`initialState와 일치하는 input.name = ${name} 이 없습니다.`);
-                return setState(prev => ({ ...(prev as typeof state & object), [name]: !(prev as Record<typeof name, boolean>)[name] }));
+                if (!initNameKeys!.find((key) => key === name)) throw Error(`initialState와 일치하는 input.name = ${name} 이 없습니다.`);
+                return setState((prev) => ({ ...(prev as typeof state & object), [name]: !(prev as Record<typeof name, boolean>)[name] }));
             }
         }
 
@@ -93,8 +94,8 @@ export const useCheckboxHandler = (initialState: string[]) => {
         if (typeof event === 'object' && 'target' in event && typeof event.target === 'object') {
             const { value, checked } = event.target;
 
-            if (checked) return setState(prev => prev.concat(value));
-            return setState(prev => prev.filter(data => data !== value));
+            if (checked) return setState((prev) => prev.concat(value));
+            return setState((prev) => prev.filter((data) => data !== value));
         }
 
         setState(event as typeof initialState | ((prev: typeof state) => typeof state));
@@ -104,7 +105,7 @@ export const useCheckboxHandler = (initialState: string[]) => {
         //전체 체크 상태일 시 전체 해제
         if (Eq.arrEqCheck(data, state)) {
             const setData = new Set(data);
-            return setState(prev => prev.filter(e => !setData.has(e)));
+            return setState((prev) => prev.filter((e) => !setData.has(e)));
         }
 
         //전체 체크상태가 아닐 시 전체 체크

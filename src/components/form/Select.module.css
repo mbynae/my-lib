@@ -24,7 +24,7 @@
     translate: 0 1px;
 }
 
-.label:has(.input:checked) .arrow {
+.label:has(.optionBox) .arrow {
     rotate: 180deg;
 }
 

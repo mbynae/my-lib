@@ -1,11 +1,18 @@
-import { HTMLProps } from 'react';
+import { DetailedHTMLProps, HTMLProps } from 'react';
 
+//고정 파트
+//text
+export interface TextInputProps extends DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+    UIType?: UIType['text'];
+}
+
+//combo
 export interface ComboGroupProps<T extends 'checkbox' | 'radio'> extends OptionProps, HTMLProps<HTMLDivElement> {
     children: React.ReactNode;
     state?: T extends 'radio' ? string : string[];
     name?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    UIType?: UIType;
+    UIType?: UIType['combo'];
     className?: string;
     inputProps?: HTMLProps<HTMLInputElement>;
 }
@@ -14,13 +21,11 @@ export interface ComboOptionProps extends OptionProps, HTMLProps<HTMLInputElemen
     type: 'radio' | 'checkbox';
     value: string;
     name?: string;
-    UIType?: UIType;
+    UIType?: UIType['combo'];
     checked?: boolean;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     children?: React.ReactNode;
 }
-
-type UIType = 'default' | 'button';
 
 interface OptionProps {
     labelProps?: HTMLProps<HTMLLabelElement>;
@@ -34,9 +39,17 @@ export type ComboContextType<T extends 'checkbox' | 'radio'> = Partial<
     props: OptionProps & { inputProps?: HTMLProps<HTMLInputElement> };
 };
 
+//추가 파트
+interface UIType {
+    text: 'default' | 'text';
+    combo: 'default' | 'button';
+    select: 'default';
+}
+
+//콤보 props 함수
 export function formComboProps(
-    UIType: UIType,
-    props: Omit<ComboGroupProps<'checkbox' | 'radio'>, 'UIType' | 'state' | 'name' | 'onChange' | 'children' | 'className'>
+    UIType: UIType['combo'],
+    props: Omit<ComboGroupProps<'checkbox' | 'radio'>, 'UIType' | 'state' | 'name' | 'onChange' | 'children' | 'className'>,
 ) {
     const { inputProps, labelProps, circleProps, childrenProps, ...rest } = props;
     const optionProps = { props: { inputProps, labelProps, childrenProps }, rest: { ...rest } };
