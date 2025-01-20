@@ -1,20 +1,22 @@
-import BoxButtonUI from './UI/ButtonBoxUI';
-import ButtonTextUI from './UI/ButtonTextUI';
-
+import { memo } from 'react';
+import * as Btns from './UI';
 import type { ButtonProps, ButtonUIType } from './button-type';
 
 interface Props extends ButtonProps {
     UIType?: ButtonUIType;
 }
 
-export default function Button({ UIType = 'default', children, ...props }: Props) {
-    if (UIType === 'text') {
-        return <ButtonTextUI {...props}>{children}</ButtonTextUI>;
-    }
+const Button = ({ UIType = 'default', children, ...props }: Props) => {
+    const name = UIType.charAt(0).toUpperCase() + UIType.slice(1);
+    const Component = Btns[name as keyof typeof Btns];
 
     return (
-        <BoxButtonUI UIType={UIType} {...props}>
-            {children}
-        </BoxButtonUI>
+        Component && (
+            <Component UIType={UIType} {...props}>
+                {children}
+            </Component>
+        )
     );
-}
+};
+
+export default memo(Button);

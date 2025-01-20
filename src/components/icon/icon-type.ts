@@ -7,6 +7,7 @@ export interface IconProps extends HTMLProps<HTMLDivElement> {
     height?: number | string;
 }
 
+//svg 컴포넌트 이름과 동일하게 (앞글자 대소문자 구분없음)
 type IconType = 'closeEye' | 'openEye';
 
 export const iconAlt = {

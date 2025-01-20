@@ -1,7 +1,7 @@
 import { createContext, memo, useContext, useMemo } from 'react';
 import { Eq } from '../../function/eq';
 
-import ComboboxUI from './combo/ComboBoxUI';
+import * as Combos from './combo';
 import styles from './comboEvent.module.css';
 
 import { formComboProps, type ComboContextType, type ComboGroupProps, type ComboOptionProps } from './form-type';
@@ -16,7 +16,7 @@ const Context = createContext<ComboContextType<'checkbox'>>({
 
 function CheckboxGroup({ UIType = 'default', state, name, onChange, children, className, ...props }: ComboGroupProps<'checkbox'>) {
     const groupStyle = useMemo(() => [styles.group, className].join(' '), [className]);
-    const { props: optionProps, rest } = formComboProps(UIType, props);
+    const { props: optionProps, rest } = formComboProps(props);
 
     return (
         <Context.Provider
@@ -46,8 +46,11 @@ export const CheckboxOption = ({
 }: Omit<ComboOptionProps, 'type'>) => {
     const {
         props: { inputProps, ...restProps },
+        UIType: groupUIType,
         ...group
     } = useContext(Context);
+
+    const UIKey = groupUIType ?? UIType;
 
     const PropsData = {
         ...group,
@@ -56,14 +59,16 @@ export const CheckboxOption = ({
         ...props,
         value: value,
         name: group.name ?? name,
-        UIType: group.UIType ?? UIType,
         onChange: group.onChange ?? onChange,
         checked: group.state ? Eq.arrElem(group.state, value) : checked,
         children: children,
         type: 'checkbox' as const,
     };
 
-    return <ComboboxUI {...PropsData} />;
+    const key = UIKey.charAt(0).toUpperCase() + UIKey.slice(1);
+
+    const Component = Combos[key as keyof typeof Combos];
+    return Component && <Component {...PropsData}>{children}</Component>;
 };
 
 export default memo(CheckboxGroup);

@@ -1,6 +1,6 @@
 // input 이벤트 핸들러
 
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Eq } from '../function/eq';
 
 // type InputState<T extends string | object | number> = T extends string ? string : T extends number ? number : Extract<T, object>;
@@ -9,38 +9,42 @@ export const useInputHandler = <T extends string | object>(initialState: InputSt
     const [state, setState] = useState(initialState);
     const initNameKeys = useMemo(() => (typeof initialState === 'object' ? Object.keys(initialState) : null), [initialState]);
 
-    const onChange = (
-        event?:
-            | typeof initialState
-            | ((prev: typeof state) => typeof state)
-            | React.ChangeEvent<HTMLInputElement>
-            | React.ChangeEvent<HTMLTextAreaElement>
-            | React.ChangeEvent<HTMLSelectElement>,
-    ) => {
-        if (typeof event === 'undefined') {
-            return setState(initialState);
-        }
-
-        if (typeof event === 'object' && 'target' in event && typeof event.target === 'object') {
-            if (typeof initialState === 'string') {
-                return setState(event.target.value as typeof initialState);
+    const onChange = useCallback(
+        (
+            event?:
+                | typeof initialState
+                | ((prev: typeof state) => typeof state)
+                | React.ChangeEvent<HTMLInputElement>
+                | React.ChangeEvent<HTMLTextAreaElement>
+                | React.ChangeEvent<HTMLSelectElement>,
+        ) => {
+            if (typeof event === 'undefined') {
+                return setState(initialState);
             }
 
-            // if (typeof initialState === 'number') {
-            //     const value = Number.isNaN(event.target.value) ? 0 : parseInt(event.target.value);
-            //     return setState(value as typeof initialState);
-            // }
+            if (typeof event === 'object' && 'target' in event && typeof event.target === 'object') {
+                if (typeof initialState === 'string') {
+                    return setState(event.target.value as typeof initialState);
+                }
 
-            if (typeof initialState === 'object') {
-                const { value, name } = event.target;
+                // if (typeof initialState === 'number') {
+                //     const value = Number.isNaN(event.target.value) ? 0 : parseInt(event.target.value);
+                //     return setState(value as typeof initialState);
+                // }
 
-                if (!initNameKeys!.find((key) => key === name)) throw Error(`initialState와 일치하는 input.name = ${name} 이 없습니다.`);
-                return setState((prev) => ({ ...(prev as typeof initialState), [name]: value }));
+                if (typeof initialState === 'object') {
+                    const { value, name } = event.target;
+
+                    if (!initNameKeys!.find((key) => key === name))
+                        throw Error(`initialState와 일치하는 input.name = ${name} 이 없습니다.`);
+                    return setState((prev) => ({ ...(prev as typeof initialState), [name]: value }));
+                }
             }
-        }
 
-        setState(event as typeof initialState | ((prev: typeof state) => typeof state));
-    };
+            setState(event as typeof initialState | ((prev: typeof state) => typeof state));
+        },
+        [initialState, state],
+    );
 
     return [state, onChange] as const;
 };
@@ -70,10 +74,18 @@ export const useBooleanHandler = <T extends boolean | object>(initialState: Bool
             }
 
             if (typeof initialState === 'object') {
-                const { name } = eventTarget;
+                const { name, dataset } = eventTarget;
 
-                if (!initNameKeys!.find((key) => key === name)) throw Error(`initialState와 일치하는 input.name = ${name} 이 없습니다.`);
-                return setState((prev) => ({ ...(prev as typeof state & object), [name]: !(prev as Record<typeof name, boolean>)[name] }));
+                const targetName = name ?? dataset.name;
+
+                if (!initNameKeys!.find((key) => key === targetName)) {
+                    throw Error(`initialState와 일치하는 input.name = ${targetName} 이 없습니다.`);
+                }
+
+                return setState((prev) => ({
+                    ...(prev as typeof state & object),
+                    [targetName]: !(prev as Record<typeof targetName, boolean>)[targetName],
+                }));
             }
         }
 

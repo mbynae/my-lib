@@ -7,7 +7,7 @@ interface Props extends ButtonProps {
     UIType: ButtonUIType;
 }
 
-export default function BoxButtonUI({ UIType, children, className, ...props }: Props) {
+export default function ButtonBoxUI({ UIType, children, className, ...props }: Props) {
     const buttonStyle = useMemo(() => [styles[`${UIType}Type`], className].join(' '), [UIType, className]);
 
     return (

@@ -8,7 +8,9 @@ export const CSS_VARIABLES = {
 
     '--disabled-color': '#cdcdcd',
     '--disabled-color-bg': '#f5f5f5',
-};
+
+    '--ddd-color-tes': '#dddddd',
+} as const;
 
 export const CSS_PROPERTY = {
     mainColor: '--main-color',
@@ -22,9 +24,4 @@ export const CSS_PROPERTY = {
     disabledColorBg: '--disabled-color-bg',
 } as const;
 
-export function cssProperty() {
-    const root = document.querySelector(':root')!;
-    const variables = getComputedStyle(root);
-
-    console.log(variables.getPropertyValue(CSS_PROPERTY.mainColor));
-}
+export const cssProperty = <T extends keyof typeof CSS_PROPERTY>(prop: T) => CSS_VARIABLES[CSS_PROPERTY[prop]];

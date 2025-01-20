@@ -48,14 +48,28 @@ interface UIType {
 
 //콤보 props 함수
 export function formComboProps(
-    UIType: UIType['combo'],
     props: Omit<ComboGroupProps<'checkbox' | 'radio'>, 'UIType' | 'state' | 'name' | 'onChange' | 'children' | 'className'>,
 ) {
-    const { inputProps, labelProps, circleProps, childrenProps, ...rest } = props;
-    const optionProps = { props: { inputProps, labelProps, childrenProps }, rest: { ...rest } };
+    // // const itemProps = Object.keys(props).filter((e) => e.includes('Props'));
 
-    if (UIType === 'default') {
-        Object.assign(optionProps.props, { circleProps });
+    // const { inputProps, labelProps, circleProps, childrenProps, ...rest } = props;
+    // const optionProps = { props: { inputProps, labelProps, childrenProps, circleProps }, rest: { ...rest } };
+
+    // const itemProps = {};
+    // const rest = {};
+
+    // Object.entries(props).forEach(([key, value]) => {
+    //     (key.includes('Props') ? props : rest)[key] = value;
+    // });
+
+    // console.log(itemProps, rest);
+
+    // return { props: itemProps, rest };
+
+    const optionProps: { props: typeof props; rest: typeof props } = { props: {}, rest: {} };
+
+    for (const key in props) {
+        optionProps[key.includes('Props') ? 'props' : 'rest'][key as keyof typeof props] = props[key as keyof typeof props];
     }
 
     return optionProps;

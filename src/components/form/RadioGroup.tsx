@@ -1,6 +1,6 @@
 import { createContext, memo, useContext, useMemo } from 'react';
 
-import ComboboxUI from './combo/ComboBoxUI';
+import * as Combos from './combo';
 import styles from './comboEvent.module.css';
 
 import { formComboProps, type ComboContextType, type ComboGroupProps, type ComboOptionProps } from './form-type';
@@ -15,7 +15,7 @@ const Context = createContext<ComboContextType<'radio'>>({
 
 function RadioGroup({ UIType = 'default', state, name, onChange, children, className, ...props }: ComboGroupProps<'radio'>) {
     const groupStyle = useMemo(() => [styles.group, className].join(' '), [className]);
-    const { props: optionProps, rest } = formComboProps(UIType, props);
+    const { props: optionProps, rest } = formComboProps(props);
 
     return (
         <Context.Provider
@@ -37,8 +37,11 @@ function RadioGroup({ UIType = 'default', state, name, onChange, children, class
 export const RadioOption = ({ UIType = 'default', value, name, onChange, checked, children, ...props }: Omit<ComboOptionProps, 'type'>) => {
     const {
         props: { inputProps, ...restProps },
+        UIType: GroupUIType,
         ...group
     } = useContext(Context);
+
+    const UIKey = GroupUIType ?? UIType;
 
     const PropsData = {
         ...group,
@@ -47,14 +50,16 @@ export const RadioOption = ({ UIType = 'default', value, name, onChange, checked
         ...props,
         value: value,
         name: group.name ?? name,
-        UIType: group.UIType ?? UIType,
         onChange: group.onChange ?? onChange,
         checked: group.state ? group.state === value : checked,
         children: children,
         type: 'radio' as const,
     };
 
-    return <ComboboxUI {...PropsData} />;
+    const key = UIKey.charAt(0).toUpperCase() + UIKey.slice(1);
+
+    const Component = Combos[key as keyof typeof Combos];
+    return Component && <Component {...PropsData}>{children}</Component>;
 };
 
 export default memo(RadioGroup);

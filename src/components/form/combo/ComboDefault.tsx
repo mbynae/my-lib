@@ -16,7 +16,7 @@ const ComboDefault = ({ children, type, ...props }: Omit<ComboOptionProps, 'UITy
             aria-label={`${type === 'radio' ? '라디오 버튼' : '체크박스'} 옵션`}
             {...labelProps}
             className={labelStyle}
-            onClick={e => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
         >
             <span {...circleProps} className={circleStyle} />
             <input {...inputProps} type={type} className={inputStyle} />
