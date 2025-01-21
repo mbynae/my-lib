@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import styles from './ComboDefault.module.css';
 
-import type { ComboOptionProps } from '../form-type';
+import type { ComboOptionProps } from '../combo-type';
 
 const ComboDefault = ({ children, type, ...props }: Omit<ComboOptionProps, 'UIType'>) => {
     const { labelProps, childrenProps, circleProps, ...inputProps } = props;
@@ -16,7 +16,7 @@ const ComboDefault = ({ children, type, ...props }: Omit<ComboOptionProps, 'UITy
             aria-label={`${type === 'radio' ? '라디오 버튼' : '체크박스'} 옵션`}
             {...labelProps}
             className={labelStyle}
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
         >
             <span {...circleProps} className={circleStyle} />
             <input {...inputProps} type={type} className={inputStyle} />

@@ -1,6 +1,7 @@
 import { DetailedHTMLProps, DetailsHTMLAttributes, HTMLProps, useMemo } from 'react';
 import Button from '../../button/Button';
 import styles from '../Modal.module.css';
+import { ButtonProps } from '../../button/button-type';
 
 interface Props extends HTMLProps<HTMLDivElement> {
     children: React.ReactNode;
@@ -9,7 +10,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     buttonClassName?: string;
     center?: boolean;
     closeBtnProps?: DetailedHTMLProps<DetailsHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
-    btnProps?: DetailedHTMLProps<DetailsHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+    btnProps?: ButtonProps;
 }
 
 type OnClick = (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -32,7 +33,7 @@ export default function ModalDefaultUI({
     const contentsStyle = useMemo(() => [styles.defaultContents, styles[center ? 'center' : '']].join(' '), [center]);
 
     return (
-        <div {...props} className={boxStyle} onClick={(e) => e.stopPropagation()}>
+        <div {...props} className={boxStyle} onClick={e => e.stopPropagation()}>
             <div className={styles.topArea}>
                 <div className={styles.closeButtonBox}>
                     <button {...cbProps} type="button" className={closeBtn} onClick={onClose} name={name} />

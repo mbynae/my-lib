@@ -1,27 +1,21 @@
 import { DetailedHTMLProps, HTMLProps } from 'react';
 
-//고정 파트
-//text
-export interface TextInputProps extends DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
-    UIType?: UIType['text'];
-}
-
 //combo
 export interface ComboGroupProps<T extends 'checkbox' | 'radio'> extends OptionProps, HTMLProps<HTMLDivElement> {
     children: React.ReactNode;
     state?: T extends 'radio' ? string : string[];
     name?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    UIType?: UIType['combo'];
+    UIType?: UIType;
     className?: string;
     inputProps?: HTMLProps<HTMLInputElement>;
 }
 
-export interface ComboOptionProps extends OptionProps, HTMLProps<HTMLInputElement> {
+export interface ComboOptionProps extends OptionProps, DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
     type: 'radio' | 'checkbox';
     value: string;
     name?: string;
-    UIType?: UIType['combo'];
+    UIType?: UIType;
     checked?: boolean;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     children?: React.ReactNode;
@@ -36,36 +30,16 @@ interface OptionProps {
 export type ComboContextType<T extends 'checkbox' | 'radio'> = Partial<
     Pick<ComboGroupProps<T>, 'UIType' | 'state' | 'onChange' | 'name'>
 > & {
-    props: OptionProps & { inputProps?: HTMLProps<HTMLInputElement> };
+    props: OptionProps & { inputProps?: DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> };
 };
 
 //추가 파트
-interface UIType {
-    text: 'default' | 'text';
-    combo: 'default' | 'button';
-    select: 'default';
-}
+type UIType = 'default' | 'button';
 
 //콤보 props 함수
 export function formComboProps(
-    props: Omit<ComboGroupProps<'checkbox' | 'radio'>, 'UIType' | 'state' | 'name' | 'onChange' | 'children' | 'className'>,
+    props: Omit<ComboGroupProps<'checkbox' | 'radio'>, 'UIType' | 'state' | 'name' | 'onChange' | 'children' | 'className'>
 ) {
-    // // const itemProps = Object.keys(props).filter((e) => e.includes('Props'));
-
-    // const { inputProps, labelProps, circleProps, childrenProps, ...rest } = props;
-    // const optionProps = { props: { inputProps, labelProps, childrenProps, circleProps }, rest: { ...rest } };
-
-    // const itemProps = {};
-    // const rest = {};
-
-    // Object.entries(props).forEach(([key, value]) => {
-    //     (key.includes('Props') ? props : rest)[key] = value;
-    // });
-
-    // console.log(itemProps, rest);
-
-    // return { props: itemProps, rest };
-
     const optionProps: { props: typeof props; rest: typeof props } = { props: {}, rest: {} };
 
     for (const key in props) {

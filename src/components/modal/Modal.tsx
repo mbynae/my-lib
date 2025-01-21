@@ -1,15 +1,13 @@
 import { HTMLProps, memo } from 'react';
 
-import ModalDefaultUI from './UI/ModalDefaultUI';
 import BackgroundOverlay from './BackgroundOvelray';
 import ModalContainer from './ModalContainer';
-// import Notice from './Notice';
-// import Download from './Download';
+import * as UI from './UI';
 
 interface Props extends HTMLProps<HTMLDivElement> {
     isOpen: boolean;
     children: React.ReactNode;
-    type?: 'default' | 'notice';
+    UIType?: 'default' | 'basic';
     onClose?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     onClick?: (e: React.MouseEvent<HTMLElement>) => void;
     bgClickActive?: boolean;
@@ -22,21 +20,18 @@ interface Props extends HTMLProps<HTMLDivElement> {
 
 type MouseEvent = (e: React.MouseEvent<HTMLElement>) => void;
 
-function Modal({ isOpen, isShowBg, children, type = 'default', onClose, onClick, bgClickActive, ...props }: Props) {
+function Modal({ isOpen, isShowBg, children, UIType = 'default', onClose, onClick, bgClickActive, ...props }: Props) {
+    const UIName = UIType.charAt(0).toUpperCase() + UIType.slice(1);
+    const Component = UI[UIName as keyof typeof UI];
+
     return (
         <ModalContainer isOpen={isOpen}>
             <BackgroundOverlay onClick={onClose as unknown as MouseEvent} isOpen={isShowBg} clickActive={bgClickActive} name={props.name}>
-                {type === 'default' && (
-                    <ModalDefaultUI onClose={onClose} onClick={onClick} {...props}>
+                {Component && (
+                    <Component onClose={onClose} onClick={onClick} {...props}>
                         {children}
-                    </ModalDefaultUI>
+                    </Component>
                 )}
-                {/* 
-                {type === 'notice' && (
-                    <Notice onClose={onClose} onClick={onClick} {...props}>
-                        {children}
-                    </Notice>
-                )}*/}
             </BackgroundOverlay>
         </ModalContainer>
     );

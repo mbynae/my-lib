@@ -1,7 +1,7 @@
 import React, { createContext, HTMLProps, ReactElement, useContext, useId, useMemo, useRef } from 'react';
-import { useBooleanHandler } from '../../hooks/useInputHandler';
-import { useCloseDropdown } from '../../hooks/useSideEffect';
-import { compose } from '../../function/compose';
+import { useBooleanHandler } from '../../../hooks/useInputHandler';
+import { useCloseDropdown } from '../../../hooks/useSideEffect';
+import { compose } from '../../../function/compose';
 
 import styles from './Select.module.css';
 
@@ -15,6 +15,8 @@ interface OptionProps extends HTMLProps<HTMLLabelElement> {
     children: React.ReactNode;
     value: string;
 }
+
+type OptionChildren = React.ReactElement<{ value: string; children: React.ReactNode }>;
 
 interface ContextType {
     name: string;
@@ -37,7 +39,7 @@ export default function Select({ state, name, onChange, children, ...props }: Pr
     const onChangeHandler = compose(setActive, onChange ?? (() => {}));
 
     //data processing
-    const innerText = useMemo(() => selectInnerText(children as ReactElement, state), [children, state]);
+    const innerText = useMemo(() => selectInnerText(children as OptionChildren, state), [children, state]);
 
     //side effect
     useCloseDropdown(active, ref, setActive);
@@ -49,7 +51,7 @@ export default function Select({ state, name, onChange, children, ...props }: Pr
                 <span>{innerText}</span>
                 <div className={styles.arrow} />
                 {children && active && (
-                    <div className={styles.optionBox} onClick={(e) => e.stopPropagation()}>
+                    <div className={styles.optionBox} onClick={e => e.stopPropagation()}>
                         {children}
                     </div>
                 )}
@@ -78,12 +80,15 @@ function Option({ children, value, ...props }: OptionProps) {
     );
 }
 
-function selectInnerText(children: ReactElement, state?: string) {
+function selectInnerText(children: OptionChildren, state?: string) {
     if (!children || typeof state === 'undefined') return;
 
     if (Array.isArray(children)) {
-        return children.find((el) => el.props.value === state).props.children;
+        if (typeof children[0].props?.value === 'undefined') return;
+        return children.find(el => el.props.value === state).props.children;
     }
+
+    if (typeof children.props?.value === 'undefined') return;
 
     return children.props.children;
 }

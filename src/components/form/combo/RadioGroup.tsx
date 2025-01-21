@@ -1,12 +1,12 @@
 import { createContext, memo, useContext, useMemo } from 'react';
-import { Eq } from '../../function/eq';
 
-import * as Combos from './combo';
+import * as Combos from './UI';
 import styles from './comboEvent.module.css';
 
-import { formComboProps, type ComboContextType, type ComboGroupProps, type ComboOptionProps } from './form-type';
+import { formComboProps, type ComboContextType, type ComboGroupProps, type ComboOptionProps } from './combo-type';
+import ComboDefault from './UI/ComboDefault';
 
-const Context = createContext<ComboContextType<'checkbox'>>({
+const Context = createContext<ComboContextType<'radio'>>({
     UIType: undefined,
     state: undefined,
     onChange: undefined,
@@ -14,7 +14,7 @@ const Context = createContext<ComboContextType<'checkbox'>>({
     props: { inputProps: undefined, labelProps: undefined, childrenProps: undefined },
 });
 
-function CheckboxGroup({ UIType = 'default', state, name, onChange, children, className, ...props }: ComboGroupProps<'checkbox'>) {
+function RadioGroup({ UIType = 'default', state, name, onChange, children, className, ...props }: ComboGroupProps<'radio'>) {
     const groupStyle = useMemo(() => [styles.group, className].join(' '), [className]);
     const { props: optionProps, rest } = formComboProps(props);
 
@@ -28,29 +28,21 @@ function CheckboxGroup({ UIType = 'default', state, name, onChange, children, cl
                 props: { ...optionProps },
             }}
         >
-            <div aria-labelledby="체크박스 그룹" {...rest} className={groupStyle} role="checkbox">
+            <div {...rest} className={groupStyle} role="radiogroup" aria-labelledby="라디오 그룹">
                 {children}
             </div>
         </Context.Provider>
     );
 }
 
-export const CheckboxOption = ({
-    UIType = 'default',
-    value,
-    name,
-    onChange,
-    checked,
-    children,
-    ...props
-}: Omit<ComboOptionProps, 'type'>) => {
+export const RadioOption = ({ UIType = 'default', value, name, onChange, checked, children, ...props }: Omit<ComboOptionProps, 'type'>) => {
     const {
         props: { inputProps, ...restProps },
-        UIType: groupUIType,
+        UIType: GroupUIType,
         ...group
     } = useContext(Context);
 
-    const UIKey = groupUIType ?? UIType;
+    const UIKey = GroupUIType ?? UIType;
 
     const PropsData = {
         ...group,
@@ -60,9 +52,9 @@ export const CheckboxOption = ({
         value: value,
         name: group.name ?? name,
         onChange: group.onChange ?? onChange,
-        checked: group.state ? Eq.arrElem(group.state, value) : checked,
+        checked: group.state ? group.state === value : checked,
         children: children,
-        type: 'checkbox' as const,
+        type: 'radio' as const,
     };
 
     const key = UIKey.charAt(0).toUpperCase() + UIKey.slice(1);
@@ -71,4 +63,4 @@ export const CheckboxOption = ({
     return Component && <Component {...PropsData}>{children}</Component>;
 };
 
-export default memo(CheckboxGroup);
+export default memo(RadioGroup);

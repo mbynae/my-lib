@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { useBooleanHandler } from '../../hooks/useInputHandler';
 
-import TextInput from '../form/TextInput';
+import TextInput from '../form/textInput/TextInput';
 import Icon from '../icon/Icon';
 import styles from './PasswordInput.module.css';
 
-import type { TextInputProps } from '../form/form-type';
+import type { TextInputProps } from '../form/textInput/textInput-type';
 
 export default function PasswordInput({ style, className, ...props }: Omit<TextInputProps, 'type'>) {
     const [toggle, setToggle] = useBooleanHandler(false);
