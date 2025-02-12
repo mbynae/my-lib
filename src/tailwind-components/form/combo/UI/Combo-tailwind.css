@@ -1,0 +1,102 @@
+@import 'tailwindcss';
+
+@layer components {
+    .combo-common {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+    }
+
+    .combo-default {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        box-sizing: border-box;
+
+        .circle {
+            width: 16px;
+            height: 16px;
+            border: 1px solid #cdcdcd;
+            border-radius: 50%;
+            translate: 0 1px;
+            position: relative;
+
+            &::after {
+                content: '';
+                width: 9px;
+                height: 9px;
+                border-radius: 50%;
+                background-color: var(--color-main-color);
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                translate: -50% -50%;
+                scale: 0;
+                transition: all 0.1s;
+            }
+        }
+
+        .input {
+            display: none;
+        }
+
+        &:has(.input:checked) .circle::after {
+            scale: 1;
+        }
+
+        &:has(.input:disabled) {
+            color: var(--color-disabled-color);
+
+            .circle::after {
+                background-color: var(--color-disabled-color);
+            }
+        }
+    }
+
+    .combo-button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        background-color: #fff;
+        border: 1px solid var(--color-main-color);
+        padding: 5px 10px;
+        border-radius: 5px;
+        box-sizing: border-box;
+
+        &:hover {
+            background-color: var(--color-main-color-thin);
+        }
+
+        &:has(.input:checked) {
+            background-color: var(--color-main-color);
+            color: #fff;
+
+            &:hover {
+                background-color: var(--color-main-color-hover);
+                color: #fff;
+            }
+        }
+
+        &:has(.input:disabled) {
+            color: var(--color-disabled-color);
+            background-color: var(--color-disabled-color-bg);
+            border-color: var(--color-disabled-color);
+
+            &:hover {
+                color: var(--color-disabled-color);
+                background-color: var(--color-disabled-color-bg);
+                border-color: var(--color-disabled-color);
+            }
+        }
+
+        .input {
+            display: none;
+        }
+    }
+}

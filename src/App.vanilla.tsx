@@ -1,18 +1,14 @@
 import { useBooleanHandler, useCheckboxHandler, useInputHandler } from './hooks/useInputHandler';
 
+import styles from './App.module.css';
 import Form from './tailwind-components/form/form/Form';
 import RadioGroup, { RadioOption } from './tailwind-components/form/combo/RadioGroup';
 import CheckboxGroup, { CheckboxOption } from './tailwind-components/form/combo/CheckboxGroup';
 import Button from './tailwind-components/button/Button';
-
+import Select from './tailwind-components/form/select/Select';
 import TextInput from './tailwind-components/form/textInput/TextInput';
 import PasswordInput from './tailwind-components/password/PasswordInput';
 import Modal from './tailwind-components/modal/Modal';
-import styles from './App.module.css';
-import { blob } from 'stream/consumers';
-import SelectDefault from './tailwind-components/form/select/UI/SelectDefault';
-import Select from './tailwind-components/form/select/Select';
-// import '../src/tailwind-components/form/combo/UI/Combo-tailwind.css';
 
 function App() {
     const [input, setInput] = useInputHandler({ text: '', radio: '1', select: '' });
@@ -33,20 +29,20 @@ function App() {
         setModal((prev) => ({ ...prev, alert: !prev.alert }));
     };
 
+    // const mainColor = cssProperty('mainColor');
+
     return (
-        <div className="box-border flex min-h-screen w-full items-center justify-center">
-            <Form onSubmit={onSubmit} className="flex w-[400px] flex-col gap-[20px] border border-[#cdcdcd] p-[25px]">
+        <div className={styles.wrap}>
+            <Form
+                onSubmit={onSubmit}
+                style={{ width: 400, display: 'flex', flexDirection: 'column', gap: 20, border: '1px solid #cdcdcd', padding: 25 }}
+            >
                 <Form.Fieldset>
                     <Form.Legend>라디오 버튼</Form.Legend>
-                    <RadioGroup UIType="default" name="radio" state={input.radio} onChange={setInput}>
-                        <RadioOption value="1">1</RadioOption>
-                        <RadioOption value="2">2</RadioOption>
-                        <RadioOption value="3">3</RadioOption>
-                        <RadioOption value="4">4</RadioOption>
-                    </RadioGroup>
-
-                    <RadioGroup UIType="button" name="radio" state={input.radio} onChange={setInput}>
-                        <RadioOption value="1">1</RadioOption>
+                    <RadioGroup name="radio" state={input.radio} onChange={setInput}>
+                        <RadioOption UIType="default" value="1">
+                            1
+                        </RadioOption>
                         <RadioOption value="2">2</RadioOption>
                         <RadioOption value="3">3</RadioOption>
                         <RadioOption value="4">4</RadioOption>
@@ -55,13 +51,14 @@ function App() {
 
                 <Form.Fieldset>
                     <Form.Legend>체크박스 버튼</Form.Legend>
-                    <CheckboxGroup UIType="button" state={check} onChange={setCheck} name="check" className="mb-5">
+                    <CheckboxGroup state={check} UIType="button" onChange={setCheck} name="check" style={{ marginBottom: 10 }}>
                         <CheckboxOption value="1">1</CheckboxOption>
                         <CheckboxOption value="2">2</CheckboxOption>
                         <CheckboxOption value="3">3</CheckboxOption>
                         <CheckboxOption value="4">4</CheckboxOption>
                     </CheckboxGroup>
-                    <Button UIType="default" onClick={() => allCheck(['1', '2', '3', '4'])} className="w-full">
+
+                    <Button UIType="outline" onClick={() => allCheck(['1', '2', '3', '4'])}>
                         전체 선택
                     </Button>
                 </Form.Fieldset>
@@ -89,9 +86,9 @@ function App() {
                     <PasswordInput placeholder="비밀번호를 작성해주세요." />
                 </Form.Fieldset>
 
-                <Button UIType="text" className="m-auto">
-                    제출
-                </Button>
+                <Button UIType="default">제출</Button>
+
+                <button className="h-full w-full border-1 border-solid border-red-700">asdas</button>
             </Form>
 
             <Modal isOpen={modal.radioModal} name="radioModal" onClick={onConfirm} onClose={setModal} bgClickActive>
@@ -103,7 +100,7 @@ function App() {
                         state={modalRadio}
                         onChange={setModalRadio}
                         className={styles.modalRadio}
-                        optionProps={{ label: { className: styles.modalRadioOption } }}
+                        labelProps={{ className: styles.modalRadioOption }}
                     >
                         <RadioOption value="1">1</RadioOption>
                         <RadioOption value="2">2</RadioOption>
@@ -125,3 +122,17 @@ function App() {
 }
 
 export default App;
+
+// //바닐라로 동적 가상선택자 사용하는 방법
+// function Example({ color }: { color: string }) {
+//     const id = useId().replaceAll(':', '');
+
+//     return (
+//         <>
+//             <style>{`.btn-default-${id}:hover {color: ${color};}`}</style>
+//             <button style={{ width: '100%', padding: 5, backgroundColor: '#eee' }} className={`btn-default-${id}`}>
+//                 asdas
+//             </button>
+//         </>
+//     );
+// }

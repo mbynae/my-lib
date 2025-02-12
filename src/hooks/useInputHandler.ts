@@ -1,9 +1,7 @@
 // input 이벤트 핸들러
-
 import { useCallback, useMemo, useState } from 'react';
 import { Eq } from '../function/eq';
 
-// type InputState<T extends string | object | number> = T extends string ? string : T extends number ? number : Extract<T, object>;
 type InputState<T extends string | object> = T extends string ? string : Extract<T, object>;
 export const useInputHandler = <T extends string | object>(initialState: InputState<T>) => {
     const [state, setState] = useState(initialState);
@@ -16,7 +14,7 @@ export const useInputHandler = <T extends string | object>(initialState: InputSt
                 | ((prev: typeof state) => typeof state)
                 | React.ChangeEvent<HTMLInputElement>
                 | React.ChangeEvent<HTMLTextAreaElement>
-                | React.ChangeEvent<HTMLSelectElement>
+                | React.ChangeEvent<HTMLSelectElement>,
         ) => {
             if (typeof event === 'undefined') {
                 return setState(initialState);
@@ -35,14 +33,15 @@ export const useInputHandler = <T extends string | object>(initialState: InputSt
                 if (typeof initialState === 'object') {
                     const { value, name } = event.target;
 
-                    if (!initNameKeys!.find(key => key === name)) throw Error(`initialState와 일치하는 input.name = ${name} 이 없습니다.`);
-                    return setState(prev => ({ ...(prev as typeof initialState), [name]: value }));
+                    if (!initNameKeys!.find((key) => key === name))
+                        throw Error(`initialState와 일치하는 input.name = ${name} 이 없습니다.`);
+                    return setState((prev) => ({ ...(prev as typeof initialState), [name]: value }));
                 }
             }
 
             setState(event as typeof initialState | ((prev: typeof state) => typeof state));
         },
-        [initialState]
+        [initialState],
     );
 
     return [state, onChange] as const;
@@ -60,7 +59,7 @@ export const useBooleanHandler = <T extends boolean | object>(initialState: Bool
                 | typeof initialState
                 | ((prev: typeof state) => typeof state)
                 | React.ChangeEvent<HTMLInputElement>
-                | React.MouseEvent<HTMLElement>
+                | React.MouseEvent<HTMLElement>,
         ) => {
             if (typeof event === 'undefined') {
                 return setState(initialState);
@@ -70,7 +69,7 @@ export const useBooleanHandler = <T extends boolean | object>(initialState: Bool
                 const eventTarget = event.target as HTMLInputElement;
 
                 if (typeof initialState === 'boolean') {
-                    return setState(prev => !prev as typeof initialState);
+                    return setState((prev) => !prev as typeof initialState);
                 }
 
                 if (typeof initialState === 'object') {
@@ -78,11 +77,11 @@ export const useBooleanHandler = <T extends boolean | object>(initialState: Bool
 
                     const targetName = name ?? dataset.name;
 
-                    if (!initNameKeys!.find(key => key === targetName)) {
+                    if (!initNameKeys!.find((key) => key === targetName)) {
                         throw Error(`initialState와 일치하는 input.name = ${targetName} 이 없습니다.`);
                     }
 
-                    return setState(prev => ({
+                    return setState((prev) => ({
                         ...(prev as typeof state & object),
                         [targetName]: !(prev as Record<typeof targetName, boolean>)[targetName],
                     }));
@@ -91,7 +90,7 @@ export const useBooleanHandler = <T extends boolean | object>(initialState: Bool
 
             setState(event as typeof initialState | ((prev: typeof state) => typeof state));
         },
-        [initialState]
+        [initialState],
     );
 
     return [state, onEventHandler] as const;
@@ -109,13 +108,13 @@ export const useCheckboxHandler = (initialState: string[]) => {
             if (typeof event === 'object' && 'target' in event && typeof event.target === 'object') {
                 const { value, checked } = event.target;
 
-                if (checked) return setState(prev => prev.concat(value));
-                return setState(prev => prev.filter(data => data !== value));
+                if (checked) return setState((prev) => prev.concat(value));
+                return setState((prev) => prev.filter((data) => data !== value));
             }
 
             setState(event as typeof initialState | ((prev: typeof state) => typeof state));
         },
-        [initialState]
+        [initialState],
     ); //개별 체크박스 onChange 핸들러
 
     const onAllCheck = useCallback(
@@ -123,13 +122,13 @@ export const useCheckboxHandler = (initialState: string[]) => {
             //전체 체크 상태일 시 전체 해제
             if (Eq.arrEqCheck(data, state)) {
                 const setData = new Set(data);
-                return setState(prev => prev.filter(e => !setData.has(e)));
+                return setState((prev) => prev.filter((e) => !setData.has(e)));
             }
 
             //전체 체크상태가 아닐 시 전체 체크
             setState([...new Set([...state, ...data])]);
         },
-        [state]
+        [state],
     ); //클릭 시 배열 데이터(data인자) 전체 체크 / 해제
 
     return [state, onCheck, onAllCheck] as const;

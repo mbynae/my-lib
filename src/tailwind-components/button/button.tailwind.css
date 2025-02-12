@@ -1,0 +1,46 @@
+@import 'tailwindcss';
+@tailwind utilities;
+
+@layer components {
+    .btn-box {
+        width: fit-content;
+        border: 1px solid var(--color-main-color);
+        background-color: var(--color-main-color);
+        color: var(--color-font-white);
+        padding: 6px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        box-sizing: border-box;
+        &:hover {
+            background-color: var(--color-main-color-hover);
+        }
+    }
+
+    .btn-outline {
+        width: fit-content;
+        padding: 6px;
+        background-color: var(--color-font-white);
+        border: 1px solid var(--color-border-gray);
+        color: var(--color-font-gray);
+        box-sizing: border-box;
+        border-radius: 5px;
+        font-size: 0.9em;
+        transition: all 0.1s;
+        cursor: pointer;
+        box-sizing: border-box;
+        &:hover {
+            background-color: var(--color-border-gray-hover);
+        }
+    }
+
+    .btn-text {
+        width: fit-content;
+        color: var(--color-font-dark);
+        cursor: pointer;
+        transition: color 0.1s;
+        &:hover {
+            color: var(--color-font-hover-blue);
+        }
+    }
+}
