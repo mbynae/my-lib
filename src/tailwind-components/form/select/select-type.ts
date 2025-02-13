@@ -1,1 +1,1 @@
-export type SelectUIType = 'default';
+export type SelectUIType = 'default' | 'line';

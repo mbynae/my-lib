@@ -44,13 +44,6 @@ function App() {
                         <RadioOption value="3">3</RadioOption>
                         <RadioOption value="4">4</RadioOption>
                     </RadioGroup>
-
-                    <RadioGroup UIType="button" name="radio" state={input.radio} onChange={setInput}>
-                        <RadioOption value="1">1</RadioOption>
-                        <RadioOption value="2">2</RadioOption>
-                        <RadioOption value="3">3</RadioOption>
-                        <RadioOption value="4">4</RadioOption>
-                    </RadioGroup>
                 </Form.Fieldset>
 
                 <Form.Fieldset>
@@ -68,7 +61,7 @@ function App() {
 
                 <Form.Fieldset>
                     <Form.Legend>셀렉트 박스 버튼</Form.Legend>
-                    <Select state={input.select} onChange={setInput} name="select">
+                    <Select UIType="line" state={input.select} onChange={setInput} name="select">
                         <Select.Option value="">선택해주세요.</Select.Option>
                         <Select.Option value="1">1번</Select.Option>
                         <Select.Option value="2">2번</Select.Option>

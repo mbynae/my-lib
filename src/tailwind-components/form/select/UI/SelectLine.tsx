@@ -1,18 +1,13 @@
-import React, { createContext, HTMLProps, JSX, useContext, useEffect, useId, useMemo, useRef } from 'react';
-import { useBooleanHandler } from '../../../hooks/useInputHandler';
-import { useCloseDropdown } from '../../../hooks/useSideEffect';
-import Icon from '../../icon/Icon';
-import { compose } from '../../../function/compose';
+import React, { createContext, HTMLProps, useContext, useId, useMemo, useRef } from 'react';
+import { compose } from '../../../../function/compose';
+import { useBooleanHandler } from '../../../../hooks/useInputHandler';
+import { useCloseDropdown } from '../../../../hooks/useSideEffect';
 
-import styles from './Select.module.css';
-import * as UI from './UI';
-import { SelectUIType } from './select-type';
-import SelectDefault from './UI/SelectDefault';
-import SelectLine from './UI/SelectLine';
+import Icon from '../../../icon/Icon';
+import styles from './SelectLine.module.css';
 
 interface Props extends HTMLProps<HTMLDivElement> {
     children: React.ReactNode;
-    UIType?: SelectUIType;
     state?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -31,7 +26,7 @@ interface ContextType {
 }
 const Context = createContext<ContextType>({ name: '', state: undefined, onChange: undefined });
 
-export default function Select({ state, name, onChange, children, ...props }: Props) {
+export default function SelectLine({ state, name, onChange, children, ...props }: Props) {
     //init
     const tempName = useId();
 
@@ -66,7 +61,7 @@ export default function Select({ state, name, onChange, children, ...props }: Pr
     );
 }
 
-Select.Option = Option;
+SelectLine.Option = Option;
 
 function Option({ children, value, ...props }: OptionProps) {
     const context = useContext(Context);
