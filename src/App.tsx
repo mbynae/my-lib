@@ -38,13 +38,6 @@ function App() {
             <Form onSubmit={onSubmit} className="flex w-[400px] flex-col gap-[20px] border border-[#cdcdcd] p-[25px]">
                 <Form.Fieldset>
                     <Form.Legend>라디오 버튼</Form.Legend>
-                    <RadioGroup UIType="default" name="radio" state={input.radio} onChange={setInput}>
-                        <RadioOption value="1">1</RadioOption>
-                        <RadioOption value="2">2</RadioOption>
-                        <RadioOption value="3">3</RadioOption>
-                        <RadioOption value="4">4</RadioOption>
-                    </RadioGroup>
-
                     <RadioGroup UIType="button" name="radio" state={input.radio} onChange={setInput}>
                         <RadioOption value="1">1</RadioOption>
                         <RadioOption value="2">2</RadioOption>
