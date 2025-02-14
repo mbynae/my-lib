@@ -1,37 +1,56 @@
-import React, { createContext, HTMLProps, JSX, useContext, useEffect, useId, useMemo, useRef } from 'react';
+import React, { createContext, DetailedHTMLProps, HTMLAttributes, HTMLProps, JSX, useContext, useId, useMemo, useRef } from 'react';
 import { useBooleanHandler } from '../../../hooks/useInputHandler';
 import { useCloseDropdown } from '../../../hooks/useSideEffect';
-import Icon from '../../icon/Icon';
 import { compose } from '../../../function/compose';
 
-import styles from './Select.module.css';
 import * as UI from './UI';
-import { SelectUIType } from './select-type';
-import SelectDefault from './UI/SelectDefault';
-import SelectLine from './UI/SelectLine';
+import type { SelectUIType } from './select-type';
 
 interface Props extends HTMLProps<HTMLDivElement> {
     children: React.ReactNode;
+    state: string;
     UIType?: SelectUIType;
-    state?: string;
+    name?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    optionProps?: {
+        label?: HTMLProps<HTMLLabelElement>;
+        input?: DetailedHTMLProps<HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+    };
 }
 
-interface OptionProps extends HTMLProps<HTMLLabelElement> {
+interface OptionProps extends HTMLProps<HTMLInputElement> {
     children: React.ReactNode;
     value: string;
+    name?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    optionProps?: {
+        label?: HTMLProps<HTMLLabelElement>;
+    };
+}
+
+interface ContextOptionProps extends HTMLProps<HTMLInputElement> {
+    children: React.ReactNode;
+    value: string;
+    name?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    optionProps?: {
+        label?: HTMLProps<HTMLLabelElement>;
+    };
 }
 
 type OptionChildren = React.ReactElement<{ value: string; children: React.ReactNode }>;
 
 interface ContextType {
-    name: string;
-    state?: string;
-    onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
+    Component?: ({ children, value, ...props }: ContextOptionProps) => JSX.Element;
+    props?: { name: string; state: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void };
+    optionProps?: {
+        label?: HTMLProps<HTMLLabelElement>;
+        input?: DetailedHTMLProps<HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+    };
 }
-const Context = createContext<ContextType>({ name: '', state: undefined, onChange: undefined });
+const Context = createContext<ContextType>({ Component: undefined, props: undefined });
 
-export default function Select({ state, name, onChange, children, ...props }: Props) {
+function Select<T extends SelectUIType = 'default'>({ UIType = 'default', children, name, state, onChange, optionProps, ...props }: Props) {
     //init
     const tempName = useId();
 
@@ -50,40 +69,53 @@ export default function Select({ state, name, onChange, children, ...props }: Pr
     //side effect
     useCloseDropdown(active, ref, setActive);
 
+    // 아이콘 컴포넌트 찾기
+    const UIName = UIType.charAt(0).toUpperCase() + UIType.slice(1);
+    const Component = UI[UIName as keyof typeof UI];
+
     return (
-        <Context.Provider value={{ name: name ?? tempName, state, onChange: onChangeHandler }}>
-            <div {...props} className={styles.label} onClick={setActive} ref={ref}>
-                <input type="text" value={state} readOnly name={name} className={styles.input} />
-                <span>{innerText}</span>
-                <Icon icon="arrow" width="0.9rem" className={styles.arrow} />
-                {children && active && (
-                    <div className={styles.optionBox} onClick={(e) => e.stopPropagation()}>
-                        {children}
-                    </div>
-                )}
-            </div>
+        <Context.Provider
+            value={{
+                Component: Component.Option,
+                props: { name: name ?? tempName, state: state, onChange: onChangeHandler },
+                optionProps: optionProps,
+            }}
+        >
+            {Component && (
+                <Component
+                    state={state}
+                    name={name ?? tempName}
+                    ref={ref}
+                    active={active}
+                    setActive={setActive}
+                    innerText={innerText}
+                    onChange={onChangeHandler}
+                    {...props}
+                >
+                    {children}
+                </Component>
+            )}
         </Context.Provider>
     );
 }
 
 Select.Option = Option;
 
-function Option({ children, value, ...props }: OptionProps) {
-    const context = useContext(Context);
+export default Select;
 
-    return (
-        <label {...props} className={styles.option}>
-            <input
-                type="radio"
-                value={value}
-                name={context.name}
-                onClick={context.onChange as unknown as (e: React.MouseEvent<HTMLInputElement>) => void}
-                data-children={children}
-                className={styles.input}
-            />
-            <span>{children}</span>
-        </label>
-    );
+function Option({ children, ...props }: OptionProps) {
+    const { Component, props: contextProps, optionProps } = useContext(Context);
+    const OptionComponent = Component;
+
+    const propsData = {
+        ...optionProps?.input,
+        ...props,
+        ...contextProps,
+        name: contextProps!.name,
+        optionProps: { ...optionProps },
+    };
+
+    return OptionComponent && <OptionComponent {...propsData}>{children}</OptionComponent>;
 }
 
 function selectInnerText(children: OptionChildren, state?: string) {
