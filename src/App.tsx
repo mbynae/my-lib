@@ -60,7 +60,12 @@ function App() {
 
                 <Form.Fieldset>
                     <Form.Legend>셀렉트 박스 버튼</Form.Legend>
-                    <Select UIType="line" state={input.select} onChange={setInput} name="select">
+                    <Select
+                        optionProps={{ label: { className: 'text-main-color' } }}
+                        state={input.select}
+                        onChange={setInput}
+                        name="select"
+                    >
                         <Select.Option value="">선택해주세요.</Select.Option>
                         <Select.Option value="1">1번</Select.Option>
                         <Select.Option value="2">2번</Select.Option>

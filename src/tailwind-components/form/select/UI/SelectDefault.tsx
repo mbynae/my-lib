@@ -1,30 +1,10 @@
-import React, { HTMLProps, Ref } from 'react';
+import React from 'react';
 
 import Icon from '../../../icon/Icon';
 import styles from './SelectDefault.module.css';
+import { SelectOptionProps, SelectProps } from '../select-type';
 
-interface Props extends HTMLProps<HTMLDivElement> {
-    children: React.ReactNode;
-    state: string;
-    name: string;
-    ref?: Ref<HTMLDivElement>;
-    active: boolean;
-    setActive: (e: React.MouseEvent<HTMLElement>) => void;
-    innerText: React.ReactNode;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-interface OptionProps extends HTMLProps<HTMLInputElement> {
-    children: React.ReactNode;
-    value: string;
-    name?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    optionProps?: {
-        label?: HTMLProps<HTMLLabelElement>;
-    };
-}
-
-export default function SelectDefault({ state, name, ref, active, setActive, innerText, onChange, children, ...props }: Props) {
+export default function SelectDefault({ state, name, ref, active, setActive, innerText, onChange, children, ...props }: SelectProps) {
     return (
         <div {...props} className={styles.label} onClick={setActive} ref={ref}>
             <input type="text" value={state} readOnly name={name} className={styles.input} />
@@ -41,7 +21,7 @@ export default function SelectDefault({ state, name, ref, active, setActive, inn
 
 SelectDefault.Option = Option;
 
-function Option({ children, value, name, onChange, optionProps, ...props }: OptionProps) {
+function Option({ children, value, name, onChange, optionProps, ...props }: SelectOptionProps) {
     const labelProps = optionProps?.label;
 
     return (

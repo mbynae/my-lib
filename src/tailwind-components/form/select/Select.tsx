@@ -1,56 +1,22 @@
-import React, { createContext, DetailedHTMLProps, HTMLAttributes, HTMLProps, JSX, useContext, useId, useMemo, useRef } from 'react';
+import { createContext, useContext, useId, useMemo, useRef } from 'react';
 import { useBooleanHandler } from '../../../hooks/useInputHandler';
 import { useCloseDropdown } from '../../../hooks/useSideEffect';
 import { compose } from '../../../function/compose';
 
 import * as UI from './UI';
-import type { SelectUIType } from './select-type';
+import type { SelectContextType, SelectGroupProps, SelectOptionChildren, SelectOptionProps, SelectUIType } from './select-type';
 
-interface Props extends HTMLProps<HTMLDivElement> {
-    children: React.ReactNode;
-    state: string;
-    UIType?: SelectUIType;
-    name?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    optionProps?: {
-        label?: HTMLProps<HTMLLabelElement>;
-        input?: DetailedHTMLProps<HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-    };
-}
+const Context = createContext<SelectContextType>({ Component: undefined, props: undefined });
 
-interface OptionProps extends HTMLProps<HTMLInputElement> {
-    children: React.ReactNode;
-    value: string;
-    name?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    optionProps?: {
-        label?: HTMLProps<HTMLLabelElement>;
-    };
-}
-
-interface ContextOptionProps extends HTMLProps<HTMLInputElement> {
-    children: React.ReactNode;
-    value: string;
-    name?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    optionProps?: {
-        label?: HTMLProps<HTMLLabelElement>;
-    };
-}
-
-type OptionChildren = React.ReactElement<{ value: string; children: React.ReactNode }>;
-
-interface ContextType {
-    Component?: ({ children, value, ...props }: ContextOptionProps) => JSX.Element;
-    props?: { name: string; state: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void };
-    optionProps?: {
-        label?: HTMLProps<HTMLLabelElement>;
-        input?: DetailedHTMLProps<HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-    };
-}
-const Context = createContext<ContextType>({ Component: undefined, props: undefined });
-
-function Select<T extends SelectUIType = 'default'>({ UIType = 'default', children, name, state, onChange, optionProps, ...props }: Props) {
+function Select<T extends SelectUIType = 'default'>({
+    UIType = 'default',
+    children,
+    name,
+    state,
+    onChange,
+    optionProps,
+    ...props
+}: SelectGroupProps<T>) {
     //init
     const tempName = useId();
 
@@ -64,7 +30,7 @@ function Select<T extends SelectUIType = 'default'>({ UIType = 'default', childr
     const onChangeHandler = compose(setActive, onChange ?? (() => {}));
 
     //data processing
-    const innerText = useMemo(() => selectInnerText(children as OptionChildren, state), [children, state]);
+    const innerText = useMemo(() => selectInnerText(children as SelectOptionChildren, state), [children, state]);
 
     //side effect
     useCloseDropdown(active, ref, setActive);
@@ -103,7 +69,7 @@ Select.Option = Option;
 
 export default Select;
 
-function Option({ children, ...props }: OptionProps) {
+function Option({ children, ...props }: SelectOptionProps) {
     const { Component, props: contextProps, optionProps } = useContext(Context);
     const OptionComponent = Component;
 
@@ -118,7 +84,7 @@ function Option({ children, ...props }: OptionProps) {
     return OptionComponent && <OptionComponent {...propsData}>{children}</OptionComponent>;
 }
 
-function selectInnerText(children: OptionChildren, state?: string) {
+function selectInnerText(children: SelectOptionChildren, state?: string) {
     if (!children || typeof state === 'undefined') return;
 
     if (Array.isArray(children)) {
@@ -131,3 +97,8 @@ function selectInnerText(children: OptionChildren, state?: string) {
 
     return children.props.children;
 }
+
+//TODO1: className 전부 테일윈드로 변경
+//TODO2: 테일윈드 적용 및 자동완성 적용
+//TODO3: input text를 radio로 바꾸고 언컨트롤 테스트
+//TODO4: innerText 쉽게 구현 방안 생각
