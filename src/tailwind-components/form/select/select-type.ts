@@ -1,4 +1,5 @@
 import { DetailedHTMLProps, HTMLAttributes, HTMLProps, JSX, Ref } from 'react';
+import { IconProps } from '../../icon/icon-type';
 
 interface BaseSelectGroupProps<T extends SelectUIType> extends HTMLProps<HTMLDivElement> {
     children: React.ReactNode;
@@ -7,7 +8,11 @@ interface BaseSelectGroupProps<T extends SelectUIType> extends HTMLProps<HTMLDiv
     name?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     optionProps?: {
-        label?: HTMLProps<HTMLLabelElement>;
+        wrap?: HTMLProps<HTMLDivElement>;
+        text?: HTMLProps<HTMLSpanElement>;
+        arrow?: Partial<IconProps>;
+        optionBox?: HTMLProps<HTMLDivElement>;
+        option?: HTMLProps<HTMLLabelElement>;
         input?: DetailedHTMLProps<HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
     };
 }
@@ -21,6 +26,12 @@ export interface SelectProps extends HTMLProps<HTMLDivElement> {
     setActive: (e: React.MouseEvent<HTMLElement>) => void;
     innerText: React.ReactNode;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    optionProp?: {
+        wrap?: HTMLProps<HTMLDivElement>;
+        text?: HTMLProps<HTMLSpanElement>;
+        arrow?: Partial<IconProps>;
+        optionBox?: HTMLProps<HTMLDivElement>;
+    };
 }
 
 interface BaseSelectOptionProps extends HTMLProps<HTMLInputElement> {
@@ -29,7 +40,8 @@ interface BaseSelectOptionProps extends HTMLProps<HTMLInputElement> {
     name?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     optionProps?: {
-        label?: HTMLProps<HTMLLabelElement>;
+        option?: HTMLProps<HTMLLabelElement>;
+        text?: HTMLProps<HTMLSpanElement>;
     };
 }
 
@@ -37,8 +49,9 @@ interface BaseSelectContextType<T extends SelectUIType> {
     Component?: ({ children, value, ...props }: SelectOptionProps<T>) => JSX.Element;
     props?: { name: string; state: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void };
     optionProps?: {
-        label?: HTMLProps<HTMLLabelElement>;
+        option?: HTMLProps<HTMLLabelElement>;
         input?: DetailedHTMLProps<HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+        text?: HTMLProps<HTMLSpanElement>;
     };
 }
 

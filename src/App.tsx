@@ -4,14 +4,11 @@ import Form from './tailwind-components/form/form/Form';
 import RadioGroup, { RadioOption } from './tailwind-components/form/combo/RadioGroup';
 import CheckboxGroup, { CheckboxOption } from './tailwind-components/form/combo/CheckboxGroup';
 import Button from './tailwind-components/button/Button';
-
+import Select from './tailwind-components/form/select/Select';
 import TextInput from './tailwind-components/form/textInput/TextInput';
 import PasswordInput from './tailwind-components/password/PasswordInput';
 import Modal from './tailwind-components/modal/Modal';
 import styles from './App.module.css';
-import SelectDefault from './tailwind-components/form/select/UI/SelectDefault';
-import Select from './tailwind-components/form/select/Select';
-// import '../src/tailwind-components/form/combo/UI/Combo-tailwind.css';
 
 function App() {
     const [input, setInput] = useInputHandler({ text: '', radio: '1', select: '' });
@@ -37,7 +34,16 @@ function App() {
             <Form onSubmit={onSubmit} className="flex w-[400px] flex-col gap-[20px] border border-[#cdcdcd] p-[25px]">
                 <Form.Fieldset>
                     <Form.Legend>라디오 버튼</Form.Legend>
-                    <RadioGroup UIType="default" name="radio" state={input.radio} onChange={setInput}>
+                    <RadioGroup
+                        UIType="default"
+                        name="radio"
+                        optionProps={{
+                            circle: { className: 'border-red-600 after:bg-red-600' },
+                            label: { className: 'text-red-600' },
+                        }}
+                        state={input.radio}
+                        onChange={setInput}
+                    >
                         <RadioOption value="1">1</RadioOption>
                         <RadioOption value="2">2</RadioOption>
                         <RadioOption value="3">3</RadioOption>
@@ -60,12 +66,7 @@ function App() {
 
                 <Form.Fieldset>
                     <Form.Legend>셀렉트 박스 버튼</Form.Legend>
-                    <Select
-                        optionProps={{ label: { className: 'text-main-color' } }}
-                        state={input.select}
-                        onChange={setInput}
-                        name="select"
-                    >
+                    <Select UIType="line" state={input.select} onChange={setInput} name="select">
                         <Select.Option value="">선택해주세요.</Select.Option>
                         <Select.Option value="1">1번</Select.Option>
                         <Select.Option value="2">2번</Select.Option>

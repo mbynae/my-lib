@@ -56,6 +56,7 @@ function Select<T extends SelectUIType = 'default'>({
                     setActive={setActive}
                     innerText={innerText}
                     onChange={onChangeHandler}
+                    optionProp={optionProps}
                     {...props}
                 >
                     {children}
@@ -98,7 +99,5 @@ function selectInnerText(children: SelectOptionChildren, state?: string) {
     return children.props.children;
 }
 
-//TODO1: className 전부 테일윈드로 변경
-//TODO2: 테일윈드 적용 및 자동완성 적용
 //TODO3: input text를 radio로 바꾸고 언컨트롤 테스트
 //TODO4: innerText 쉽게 구현 방안 생각

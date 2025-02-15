@@ -1,17 +1,34 @@
 import React from 'react';
 
 import Icon from '../../../icon/Icon';
-import styles from './SelectLine.module.css';
-import { SelectOptionProps, SelectProps } from '../select-type';
+import './select-tailwind.css';
 
-export default function SelectLine({ state, name, ref, active, setActive, innerText, onChange, children, ...props }: SelectProps) {
+import type { SelectOptionProps, SelectProps } from '../select-type';
+
+export default function SelectLine({
+    state,
+    name,
+    ref,
+    active,
+    setActive,
+    innerText,
+    onChange,
+    children,
+    optionProp,
+    ...props
+}: SelectProps) {
+    const wrapProps = optionProp?.wrap;
+    const textProps = optionProp?.text;
+    const arrowProps = optionProp?.arrow;
+    const optionBox = optionProp?.optionBox;
+
     return (
-        <div {...props} className={styles.label} onClick={setActive} ref={ref}>
-            <input type="text" value={state} readOnly name={name} className={styles.input} />
-            <span>{innerText}</span>
-            <Icon icon="arrow" width="0.9rem" className={styles.arrow} />
+        <div {...wrapProps} className={`select-line ${wrapProps?.className}`} onClick={setActive} ref={ref}>
+            <input type="text" value={state} readOnly name={name} className="input" />
+            <span {...textProps}>{innerText}</span>
+            <Icon icon="arrow" width="0.9rem" {...arrowProps} className={`arrow ${arrowProps?.className}`} />
             {children && active && (
-                <div className={styles.optionBox} onClick={(e) => e.stopPropagation()}>
+                <div {...optionBox} className={`optionBox ${optionBox?.className}`} onClick={(e) => e.stopPropagation()}>
                     {children}
                 </div>
             )}
@@ -22,10 +39,11 @@ export default function SelectLine({ state, name, ref, active, setActive, innerT
 SelectLine.Option = Option;
 
 function Option({ children, value, name, onChange, optionProps, ...props }: SelectOptionProps) {
-    const labelProps = optionProps?.label;
+    const labelProps = optionProps?.option;
+    const textProps = optionProps?.text;
 
     return (
-        <label {...labelProps} className={styles.option}>
+        <label {...labelProps} className={`option ${labelProps}`}>
             <input
                 {...props}
                 type="radio"
@@ -33,9 +51,9 @@ function Option({ children, value, name, onChange, optionProps, ...props }: Sele
                 name={name}
                 onClick={onChange as unknown as (e: React.MouseEvent<HTMLInputElement>) => void}
                 data-children={children}
-                className={styles.input}
+                className="input"
             />
-            <span>{children}</span>
+            <span {...textProps}>{children}</span>
         </label>
     );
 }
