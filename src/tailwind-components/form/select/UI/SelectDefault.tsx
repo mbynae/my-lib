@@ -1,7 +1,8 @@
 import React from 'react';
 
 import Icon from '../../../icon/Icon';
-import styles from './SelectDefault.module.css';
+// import styles from './SelectDefault.module.css';
+import './select-tailwind.css';
 import { SelectOptionProps, SelectProps } from '../select-type';
 
 export default function SelectDefault({ state, name, ref, active, setActive, innerText, onChange, children, ...props }: SelectProps) {
