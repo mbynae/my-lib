@@ -1,3 +1,5 @@
+import { classNames } from '../../../../function/className';
+
 import './Combo-tailwind.css';
 import type { ComboOptionProps, ComboType } from '../combo-type';
 
@@ -10,11 +12,11 @@ function ComboDefault<T extends ComboType>({ children, type, optionProps, ...pro
         <label
             aria-label={`${type === 'radio' ? '라디오 버튼' : '체크박스'} 옵션`}
             {...labelProps}
-            className={`combo-default ${labelProps?.className}`}
+            className={classNames('combo-button', labelProps?.className)}
             onClick={(e) => e.stopPropagation()}
         >
-            <input {...props} type={type} className={`input ${props.className}`} />
-            <span {...circleProps} className={`circle ${circleProps?.className}`} />
+            <input {...props} type={type} className={classNames('input', props.className)} />
+            <span {...circleProps} className={classNames('circle', circleProps?.className)} />
             <span {...childrenProps} className={childrenProps?.className}>
                 {children}
             </span>

@@ -1,5 +1,5 @@
-import { createContext, useContext, useId, useMemo, useRef } from 'react';
-import { useBooleanHandler } from '../../../hooks/useInputHandler';
+import { createContext, JSX, useContext, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useBooleanHandler, useInputHandler } from '../../../hooks/useInputHandler';
 import { useCloseDropdown } from '../../../hooks/useSideEffect';
 import { compose } from '../../../function/compose';
 
@@ -78,6 +78,7 @@ function Option({ children, ...props }: SelectOptionProps) {
         ...optionProps?.input,
         ...props,
         ...contextProps,
+        checked: contextProps?.state !== undefined ? contextProps?.state === props.value : undefined,
         name: contextProps!.name,
         optionProps: { ...optionProps },
     };
@@ -86,10 +87,12 @@ function Option({ children, ...props }: SelectOptionProps) {
 }
 
 function selectInnerText(children: SelectOptionChildren, state?: string) {
-    if (!children || typeof state === 'undefined') return;
+    if (!children) return;
 
     if (Array.isArray(children)) {
         if (typeof children[0].props?.value === 'undefined') return;
+
+        if (!state) return children[0].props.children;
 
         return children.find((el) => el.props.value === state).props.children;
     }
@@ -99,5 +102,6 @@ function selectInnerText(children: SelectOptionChildren, state?: string) {
     return children.props.children;
 }
 
+//TODO1: 훨씬 간단한 방법으로 리팩토링
 //TODO3: input text를 radio로 바꾸고 언컨트롤 테스트
 //TODO4: innerText 쉽게 구현 방안 생각

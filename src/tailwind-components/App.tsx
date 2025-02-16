@@ -1,20 +1,29 @@
-import { useBooleanHandler, useCheckboxHandler, useInputHandler } from './hooks/useInputHandler';
+import { useBooleanHandler, useCheckboxHandler, useInputHandler } from '../hooks/useInputHandler';
 
-import Form from './tailwind-components/form/form/Form';
-import RadioGroup, { RadioOption } from './tailwind-components/form/combo/RadioGroup';
-import CheckboxGroup, { CheckboxOption } from './tailwind-components/form/combo/CheckboxGroup';
-import Button from './tailwind-components/button/Button';
-import Select from './tailwind-components/form/select/Select';
-import TextInput from './tailwind-components/form/textInput/TextInput';
-import PasswordInput from './tailwind-components/password/PasswordInput';
-import Modal from './tailwind-components/modal/Modal';
-import styles from './App.module.css';
+import Form from './form/form/Form';
+import RadioGroup, { RadioOption } from './form/combo/RadioGroup';
+import CheckboxGroup, { CheckboxOption } from './form/combo/CheckboxGroup';
+import Button from './button/Button';
+import Select from './form/select/Select';
+import TextInput from './form/textInput/TextInput';
+import PasswordInput from './password/PasswordInput';
+import Modal from './modal/Modal';
+import styles from '../vanilla-components/App.module.css';
+import Select2 from './form/select/Select2';
 
 function App() {
-    const [input, setInput] = useInputHandler({ text: '', radio: '1', select: '' });
+    const [input, setInput] = useInputHandler({
+        text: '',
+        radio: '',
+        select: '',
+    });
     const [check, setCheck, allCheck] = useCheckboxHandler([]);
 
-    const [modal, setModal] = useBooleanHandler({ radioModal: false, alert: false, basic: false });
+    const [modal, setModal] = useBooleanHandler({
+        radioModal: false,
+        alert: false,
+        basic: false,
+    });
     const [modalRadio, setModalRadio] = useInputHandler('1');
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -22,7 +31,9 @@ function App() {
 
         const formData = new FormData(e.currentTarget);
 
-        setModal((prev) => ({ ...prev, radioModal: true }));
+        console.log(formData.get('select2'));
+
+        // setModal((prev) => ({ ...prev, radioModal: true }));
     };
 
     const onConfirm = () => {
@@ -34,16 +45,7 @@ function App() {
             <Form onSubmit={onSubmit} className="flex w-[400px] flex-col gap-[20px] border border-[#cdcdcd] p-[25px]">
                 <Form.Fieldset>
                     <Form.Legend>라디오 버튼</Form.Legend>
-                    <RadioGroup
-                        UIType="default"
-                        name="radio"
-                        optionProps={{
-                            circle: { className: 'border-red-600 after:bg-red-600' },
-                            label: { className: 'text-red-600' },
-                        }}
-                        state={input.radio}
-                        onChange={setInput}
-                    >
+                    <RadioGroup UIType="default" state={input.radio} name="radio" onChange={setInput}>
                         <RadioOption value="1">1</RadioOption>
                         <RadioOption value="2">2</RadioOption>
                         <RadioOption value="3">3</RadioOption>
@@ -59,20 +61,31 @@ function App() {
                         <CheckboxOption value="3">3</CheckboxOption>
                         <CheckboxOption value="4">4</CheckboxOption>
                     </CheckboxGroup>
-                    <Button UIType="default" onClick={() => allCheck(['1', '2', '3', '4'])} className="w-full">
+                    <Button type="button" UIType="default" onClick={() => allCheck(['1', '2', '3', '4'])} className="w-full">
                         전체 선택
                     </Button>
                 </Form.Fieldset>
 
                 <Form.Fieldset>
                     <Form.Legend>셀렉트 박스 버튼</Form.Legend>
-                    <Select UIType="line" state={input.select} onChange={setInput} name="select">
+                    <Select state={input.select} name="select" onChange={setInput}>
                         <Select.Option value="">선택해주세요.</Select.Option>
                         <Select.Option value="1">1번</Select.Option>
                         <Select.Option value="2">2번</Select.Option>
                         <Select.Option value="3">3번</Select.Option>
                         <Select.Option value="4">4번</Select.Option>
                     </Select>
+                </Form.Fieldset>
+
+                <Form.Fieldset>
+                    <Form.Legend>셀렉트 박스 버튼2</Form.Legend>
+                    <Select2>
+                        <Select2.Option value="">선택해주세요.</Select2.Option>
+                        <Select2.Option value="1">1번</Select2.Option>
+                        <Select2.Option value="2">2번</Select2.Option>
+                        <Select2.Option value="3">3번</Select2.Option>
+                        <Select2.Option value="4">4번</Select2.Option>
+                    </Select2>
                 </Form.Fieldset>
 
                 <Form.Fieldset>
@@ -101,7 +114,9 @@ function App() {
                         state={modalRadio}
                         onChange={setModalRadio}
                         className={styles.modalRadio}
-                        optionProps={{ label: { className: styles.modalRadioOption } }}
+                        optionProps={{
+                            label: { className: styles.modalRadioOption },
+                        }}
                     >
                         <RadioOption value="1">1</RadioOption>
                         <RadioOption value="2">2</RadioOption>

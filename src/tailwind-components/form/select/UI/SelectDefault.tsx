@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { classNames } from '../../../../function/className';
 
 import Icon from '../../../icon/Icon';
 import './select-tailwind.css';
@@ -23,12 +24,12 @@ export default function SelectDefault({
     const optionBox = optionProp?.optionBox;
 
     return (
-        <div {...wrapProps} className={`select-default ${wrapProps?.className}`} onClick={setActive} ref={ref}>
-            <input {...props} type="text" value={state} readOnly name={name} className="input" />
+        <div {...wrapProps} className={classNames('select-default', wrapProps?.className)} onClick={setActive} ref={ref}>
+            <input {...props} type="text" value={state} readOnly name={name} className="input" data-children={innerText} />
             <span {...textProps}>{innerText}</span>
-            <Icon icon="arrow" width="0.9rem" {...arrowProps} className={`arrow ${arrowProps?.className}`} />
+            <Icon icon="arrow" width="0.9rem" {...arrowProps} className={classNames('arrow', arrowProps?.className)} />
             {children && active && (
-                <div {...optionBox} className={`optionBox ${optionBox?.className}`} onClick={(e) => e.stopPropagation()}>
+                <div {...optionBox} className={classNames('optionBox', optionBox?.className)} onClick={(e) => e.stopPropagation()}>
                     {children}
                 </div>
             )}
@@ -43,19 +44,19 @@ function Option({ children, value, name, onChange, optionProps, ...props }: Sele
     const textProps = optionProps?.text;
 
     return (
-        <label {...labelProps} className={`option ${labelProps?.className}`}>
+        <label {...labelProps} className={classNames('option', labelProps?.className)}>
             <input
+                onChange={() => {}}
                 {...props}
                 type="radio"
                 value={value}
                 name={name}
+                checked={props?.checked}
                 onClick={onChange as unknown as (e: React.MouseEvent<HTMLInputElement>) => void}
                 data-children={children}
-                className={`input`}
+                className="input"
             />
             <span {...textProps}>{children}</span>
         </label>
     );
 }
-
-//wrap, arrow, innerText

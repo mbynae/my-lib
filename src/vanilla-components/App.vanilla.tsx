@@ -1,14 +1,14 @@
-import { useBooleanHandler, useCheckboxHandler, useInputHandler } from './hooks/useInputHandler';
+import { useBooleanHandler, useCheckboxHandler, useInputHandler } from '../hooks/useInputHandler';
 
 import styles from './App.module.css';
-import Form from './tailwind-components/form/form/Form';
-import RadioGroup, { RadioOption } from './tailwind-components/form/combo/RadioGroup';
-import CheckboxGroup, { CheckboxOption } from './tailwind-components/form/combo/CheckboxGroup';
-import Button from './tailwind-components/button/Button';
-import Select from './tailwind-components/form/select/Select';
-import TextInput from './tailwind-components/form/textInput/TextInput';
-import PasswordInput from './tailwind-components/password/PasswordInput';
-import Modal from './tailwind-components/modal/Modal';
+import Form from '../tailwind-components/form/form/Form';
+import RadioGroup, { RadioOption } from '../tailwind-components/form/combo/RadioGroup';
+import CheckboxGroup, { CheckboxOption } from '../tailwind-components/form/combo/CheckboxGroup';
+import Button from '../tailwind-components/button/Button';
+import Select from '../tailwind-components/form/select/Select';
+import TextInput from '../tailwind-components/form/textInput/TextInput';
+import PasswordInput from '../tailwind-components/password/PasswordInput';
+import Modal from '../tailwind-components/modal/Modal';
 
 function App() {
     const [input, setInput] = useInputHandler({ text: '', radio: '1', select: '' });

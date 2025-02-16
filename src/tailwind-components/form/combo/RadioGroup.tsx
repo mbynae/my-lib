@@ -59,7 +59,7 @@ export function RadioOption<T extends ComboUIType = 'default'>({
         value: value,
         name: group.name ?? name,
         onChange: group.onChange ?? onChange,
-        checked: state ? state === value : checked,
+        checked: state !== undefined ? state === value : checked,
         children: children,
         optionProps: { ...optionProps },
         type: 'radio' as const,

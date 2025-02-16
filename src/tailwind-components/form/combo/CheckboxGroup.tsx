@@ -60,7 +60,7 @@ export function CheckboxOption<T extends ComboUIType = 'default'>({
         value: value,
         name: group.name ?? name,
         onChange: group.onChange ?? onChange,
-        checked: state ? Eq.arrElem(state, value) : checked,
+        checked: state !== undefined ? Eq.arrElem(state, value) : checked,
         children: children,
         optionProps: { ...optionProps },
         type: 'checkbox' as const,
