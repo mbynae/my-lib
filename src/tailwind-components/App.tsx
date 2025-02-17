@@ -4,18 +4,18 @@ import Form from './form/form/Form';
 import RadioGroup, { RadioOption } from './form/combo/RadioGroup';
 import CheckboxGroup, { CheckboxOption } from './form/combo/CheckboxGroup';
 import Button from './button/Button';
-import Select from './form/select/Select';
+
 import TextInput from './form/textInput/TextInput';
 import PasswordInput from './password/PasswordInput';
+import Select from './form/select/Select';
 import Modal from './modal/Modal';
 import styles from '../vanilla-components/App.module.css';
-import Select2 from './form/select/Select2';
 
 function App() {
     const [input, setInput] = useInputHandler({
         text: '',
         radio: '',
-        select: '',
+        select: '3',
     });
     const [check, setCheck, allCheck] = useCheckboxHandler([]);
 
@@ -31,7 +31,7 @@ function App() {
 
         const formData = new FormData(e.currentTarget);
 
-        console.log(formData.get('select2'));
+        console.log(formData.get('select'));
 
         // setModal((prev) => ({ ...prev, radioModal: true }));
     };
@@ -66,7 +66,7 @@ function App() {
                     </Button>
                 </Form.Fieldset>
 
-                <Form.Fieldset>
+                {/* <Form.Fieldset>
                     <Form.Legend>셀렉트 박스 버튼</Form.Legend>
                     <Select state={input.select} name="select" onChange={setInput}>
                         <Select.Option value="">선택해주세요.</Select.Option>
@@ -75,17 +75,28 @@ function App() {
                         <Select.Option value="3">3번</Select.Option>
                         <Select.Option value="4">4번</Select.Option>
                     </Select>
-                </Form.Fieldset>
+                </Form.Fieldset> */}
 
-                <Form.Fieldset>
+                {/* <Form.Fieldset>
                     <Form.Legend>셀렉트 박스 버튼2</Form.Legend>
-                    <Select2>
+                    <Select2 state={input.select} onChange={setInput} name="select">
                         <Select2.Option value="">선택해주세요.</Select2.Option>
                         <Select2.Option value="1">1번</Select2.Option>
                         <Select2.Option value="2">2번</Select2.Option>
                         <Select2.Option value="3">3번</Select2.Option>
                         <Select2.Option value="4">4번</Select2.Option>
                     </Select2>
+                </Form.Fieldset> */}
+
+                <Form.Fieldset>
+                    <Form.Legend>셀렉트 박스 버튼</Form.Legend>
+                    <Select UIType="line" name="select">
+                        <Select.Option value="0">선택해주세요</Select.Option>
+                        <Select.Option value="1">1번</Select.Option>
+                        <Select.Option value="2">2번</Select.Option>
+                        <Select.Option value="3">3번</Select.Option>
+                        <Select.Option value="4">4번</Select.Option>
+                    </Select>
                 </Form.Fieldset>
 
                 <Form.Fieldset>
@@ -99,7 +110,6 @@ function App() {
                     />
                     <PasswordInput placeholder="비밀번호를 작성해주세요." />
                 </Form.Fieldset>
-
                 <Button UIType="text" className="m-auto">
                     제출
                 </Button>

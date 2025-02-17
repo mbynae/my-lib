@@ -1,12 +1,9 @@
-import { createContext, JSX, useContext, useEffect, useId, useMemo, useRef, useState } from 'react';
-import { useBooleanHandler, useInputHandler } from '../../../hooks/useInputHandler';
+import { ReactElement, useId, useMemo, useRef, useState } from 'react';
+import { useBooleanHandler } from '../../../hooks/useInputHandler';
 import { useCloseDropdown } from '../../../hooks/useSideEffect';
-import { compose } from '../../../function/compose';
 
 import * as UI from './UI';
-import type { SelectContextType, SelectGroupProps, SelectOptionChildren, SelectOptionProps, SelectUIType } from './select-type';
-
-const Context = createContext<SelectContextType>({ Component: undefined, props: undefined });
+import type { SelectGroupProps, SelectOptionProps, SelectUIType } from './select-type';
 
 function Select<T extends SelectUIType = 'default'>({
     UIType = 'default',
@@ -23,14 +20,20 @@ function Select<T extends SelectUIType = 'default'>({
     //ref
     const ref = useRef<HTMLDivElement>(null);
 
+    const initState = useMemo(() => initSelectValue(children, state), []);
+
     //state
     const [active, setActive] = useBooleanHandler(false);
+    const [unControl, setUnControl] = useState(initState.value);
+    const [innerText, setInnerText] = useState<React.ReactNode>(initState.text);
 
-    //side effect
-    const onChangeHandler = compose(setActive, onChange ?? (() => {}));
-
-    //data processing
-    const innerText = useMemo(() => selectInnerText(children as SelectOptionChildren, state), [children, state]);
+    //event handler
+    const onChangeHandler = (e: React.MouseEvent<HTMLInputElement>, text: React.ReactNode) => {
+        if (onChange) onChange(e as unknown as React.ChangeEvent<HTMLInputElement>);
+        else setUnControl(e.currentTarget.value);
+        setInnerText(text);
+        setActive();
+    };
 
     //side effect
     useCloseDropdown(active, ref, setActive);
@@ -40,68 +43,46 @@ function Select<T extends SelectUIType = 'default'>({
     const Component = UI[UIName as keyof typeof UI];
 
     return (
-        <Context.Provider
-            value={{
-                Component: Component.Option,
-                props: { name: name ?? tempName, state: state, onChange: onChangeHandler },
-                optionProps: optionProps,
-            }}
-        >
-            {Component && (
-                <Component
-                    state={state}
-                    name={name ?? tempName}
-                    ref={ref}
-                    active={active}
-                    setActive={setActive}
-                    innerText={innerText}
-                    onChange={onChangeHandler}
-                    optionProp={optionProps}
-                    {...props}
-                >
-                    {children}
-                </Component>
-            )}
-        </Context.Provider>
+        Component && (
+            <Component
+                state={state ?? unControl}
+                name={name ?? tempName}
+                ref={ref}
+                active={active}
+                innerText={innerText}
+                setActive={setActive}
+                onChange={onChangeHandler}
+                optionProps={optionProps}
+                {...props}
+            >
+                {children}
+            </Component>
+        )
     );
 }
 
 Select.Option = Option;
 
+function Option(props: SelectOptionProps) {
+    return null;
+}
+
 export default Select;
 
-function Option({ children, ...props }: SelectOptionProps) {
-    const { Component, props: contextProps, optionProps } = useContext(Context);
-    const OptionComponent = Component;
+function initSelectValue(children: ReactElement<SelectOptionProps>[] | ReactElement<SelectOptionProps>, state?: string) {
+    if (!children) throw Error('Select.Option이 없습니다.');
 
-    const propsData = {
-        ...optionProps?.input,
-        ...props,
-        ...contextProps,
-        checked: contextProps?.state !== undefined ? contextProps?.state === props.value : undefined,
-        name: contextProps!.name,
-        optionProps: { ...optionProps },
-    };
+    const arr = Array.isArray(children) ? children : [children];
+    const initCheck = arr.findLast((child) => child.props?.defaultCheck);
 
-    return OptionComponent && <OptionComponent {...propsData}>{children}</OptionComponent>;
-}
-
-function selectInnerText(children: SelectOptionChildren, state?: string) {
-    if (!children) return;
-
-    if (Array.isArray(children)) {
-        if (typeof children[0].props?.value === 'undefined') return;
-
-        if (!state) return children[0].props.children;
-
-        return children.find((el) => el.props.value === state).props.children;
+    if (state === undefined && initCheck) {
+        return { value: initCheck.props.value, text: initCheck.props.children };
     }
 
-    if (typeof children.props?.value === 'undefined') return;
+    if (state === undefined && !initCheck) {
+        return { value: arr[0].props.value, text: arr[0].props.children };
+    }
 
-    return children.props.children;
+    const initState = arr.find((child) => child.props.value === state);
+    return { value: initState?.props.value, text: initState?.props.children };
 }
-
-//TODO1: 훨씬 간단한 방법으로 리팩토링
-//TODO3: input text를 radio로 바꾸고 언컨트롤 테스트
-//TODO4: innerText 쉽게 구현 방안 생각
