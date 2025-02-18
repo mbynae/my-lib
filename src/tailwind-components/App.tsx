@@ -45,7 +45,7 @@ function App() {
             <Form onSubmit={onSubmit} className="flex w-[400px] flex-col gap-[20px] border border-[#cdcdcd] p-[25px]">
                 <Form.Fieldset>
                     <Form.Legend>라디오 버튼</Form.Legend>
-                    <RadioGroup UIType="button" state={input.radio} name="radio" onChange={setInput}>
+                    <RadioGroup state={input.radio} name="radio" onChange={setInput}>
                         <Radio value="1">1</Radio>
                         <Radio value="2">2</Radio>
                         <Radio value="3">3</Radio>
@@ -53,9 +53,15 @@ function App() {
                     </RadioGroup>
                 </Form.Fieldset>
 
-                {/* <Form.Fieldset>
+                <Form.Fieldset>
                     <Form.Legend>체크박스 버튼</Form.Legend>
-                    <CheckboxGroup UIType="button" state={check} onChange={setCheck} name="check" className="mb-5">
+                    <CheckboxGroup
+                        UIType="button"
+                        state={check}
+                        onChange={setCheck}
+                        name="check"
+                        optionProps={{ group: { className: 'mb-3' } }}
+                    >
                         <Checkbox value="1">1</Checkbox>
                         <Checkbox value="2">2</Checkbox>
                         <Checkbox value="3">3</Checkbox>
@@ -64,7 +70,7 @@ function App() {
                     <Button type="button" UIType="default" onClick={() => allCheck(['1', '2', '3', '4'])} className="w-full">
                         전체 선택
                     </Button>
-                </Form.Fieldset> */}
+                </Form.Fieldset>
 
                 <Form.Fieldset>
                     <Form.Legend>셀렉트 박스 버튼</Form.Legend>

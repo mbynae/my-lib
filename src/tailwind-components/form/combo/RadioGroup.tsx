@@ -38,6 +38,7 @@ export function Radio<T extends ComboUIType>({ UIType = 'default', children, ...
     const UI = UIType.charAt(0).toUpperCase() + UIType.slice(1);
 
     const Component = Combos[UI as keyof typeof Combos];
+
     return (
         Component && (
             <Component {...props} type="radio">

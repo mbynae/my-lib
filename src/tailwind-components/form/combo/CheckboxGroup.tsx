@@ -1,75 +1,50 @@
-import { createContext, memo, useContext, useMemo } from 'react';
 import { Eq } from '../../../function/eq';
 
-import * as Combos from './UI';
+import * as UI from './UI';
 import './UI/Combo-tailwind.css';
 
-import { ComboUIType, type ComboContextType, type ComboGroupProps, type ComboOptionProps } from './combo-type';
-
-const Context = createContext<ComboContextType<'checkbox', ComboUIType>>({
-    UIType: undefined,
-    state: undefined,
-    onChange: undefined,
-    name: undefined,
-    optionProps: undefined,
-});
+import type { ComboUIType, ComboGroupProps, ComboOptionProps } from './combo-type';
 
 function CheckboxGroup<T extends ComboUIType = 'default'>({
     UIType = 'default',
-    state,
-    name,
-    onChange,
     children,
-    className,
+    state,
     optionProps,
     ...props
 }: ComboGroupProps<'checkbox', T>) {
+    const arrayChild = Array.isArray(children) ? children : [children];
+
+    const { group: groupProps, ...rest } = optionProps || {};
+
     return (
-        <Context.Provider
-            value={{
-                UIType: UIType,
-                state: state,
-                name: name,
-                onChange: onChange,
-                optionProps: optionProps,
-            }}
-        >
-            <div {...props} aria-labelledby="체크박스 그룹" role="checkbox" className={`combo-common ${className}`}>
-                {children}
-            </div>
-        </Context.Provider>
+        <div {...groupProps} aria-labelledby="체크박스 그룹" role="checkbox" className={`combo-common ${groupProps?.className}`}>
+            {arrayChild.map((child) => (
+                <Checkbox
+                    key={child.props.value}
+                    UIType={UIType}
+                    checked={state ? Eq.arrElem(state, child.props.value) : undefined}
+                    optionProps={rest}
+                    {...child.props}
+                    {...props}
+                >
+                    {child.props.children}
+                </Checkbox>
+            ))}
+        </div>
     );
 }
 
-export function Checkbox<T extends ComboUIType = 'default'>({
-    UIType = 'default',
-    value,
-    name,
-    onChange,
-    checked,
-    children,
-    ...props
-}: ComboOptionProps<'checkbox', T>) {
-    const { UIType: GroupUIType, state, optionProps, ...group } = useContext(Context);
+export function Checkbox<T extends ComboUIType = 'default'>({ UIType = 'default', children, ...props }: ComboOptionProps<'checkbox', T>) {
+    const key = UIType.charAt(0).toUpperCase() + UIType.slice(1);
 
-    const UIKey = GroupUIType ?? UIType;
-
-    const PropsData = {
-        ...optionProps?.input,
-        ...props,
-        value: value,
-        name: group.name ?? name,
-        onChange: group.onChange ?? onChange,
-        checked: state !== undefined ? Eq.arrElem(state, value) : checked,
-        children: children,
-        optionProps: { ...optionProps },
-        type: 'checkbox' as const,
-    };
-
-    const key = UIKey.charAt(0).toUpperCase() + UIKey.slice(1);
-
-    const Component = Combos[key as keyof typeof Combos];
-    return Component && <Component {...PropsData}>{children}</Component>;
+    const Component = UI[key as keyof typeof UI];
+    return (
+        Component && (
+            <Component {...props} type="checkbox">
+                {children}
+            </Component>
+        )
+    );
 }
 
-export default memo(CheckboxGroup);
+export default CheckboxGroup;
