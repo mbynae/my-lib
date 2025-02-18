@@ -1,78 +1,53 @@
-import { createContext, useContext } from 'react';
+import { classNames } from '../../../function/className';
 
 import * as Combos from './UI';
 import './UI/Combo-tailwind.css';
 
-import { ComboUIType, type ComboContextType, type ComboGroupProps, type ComboOptionProps } from './combo-type';
-
-const Context = createContext<ComboContextType<'radio', ComboUIType>>({
-    UIType: 'default',
-    state: undefined,
-    onChange: undefined,
-    name: undefined,
-    optionProps: undefined,
-});
+import type { ComboUIType, ComboGroupProps, ComboOptionProps } from './combo-type';
 
 function RadioGroup<T extends ComboUIType = 'default'>({
     UIType = 'default',
-    state,
-    name,
-    onChange,
     children,
-    className,
+    state,
     optionProps,
     ...props
 }: ComboGroupProps<'radio', T>) {
+    const arrayChild = Array.isArray(children) ? children : [children];
+
+    const { group: groupProps, ...rest } = optionProps || {};
+
     return (
-        <Context.Provider
-            value={{
-                UIType: UIType,
-                state: state,
-                name: name,
-                onChange: onChange,
-                optionProps: optionProps,
-            }}
-        >
-            <div {...props} role="radiogroup" aria-labelledby="라디오 그룹" className={`combo-common ${className}`}>
-                {children}
-            </div>
-        </Context.Provider>
+        <div {...groupProps} role="radiogroup" aria-labelledby="라디오 그룹" className={classNames('combo-common', groupProps?.className)}>
+            {arrayChild.map((child) => (
+                <Radio
+                    key={child.props.value}
+                    UIType={UIType}
+                    checked={state === child.props.value}
+                    optionProps={rest}
+                    {...child.props}
+                    {...props}
+                >
+                    {child.props.children}
+                </Radio>
+            ))}
+        </div>
     );
 }
 
-export function RadioOption<T extends ComboUIType = 'default'>({
-    UIType = 'default',
-    value,
-    name,
-    onChange,
-    checked,
-    children,
-    ...props
-}: ComboOptionProps<'radio', T>) {
-    const { UIType: GroupUIType, state, optionProps, ...group } = useContext(Context);
+export function Radio<T extends ComboUIType>({ UIType = 'default', children, ...props }: ComboOptionProps<'radio', T>) {
+    const UI = UIType.charAt(0).toUpperCase() + UIType.slice(1);
 
-    const UIKey = GroupUIType ?? UIType;
-
-    const PropsData = {
-        ...optionProps?.input,
-        ...props,
-        value: value,
-        name: group.name ?? name,
-        onChange: group.onChange ?? onChange,
-        checked: state !== undefined ? state === value : checked,
-        children: children,
-        optionProps: { ...optionProps },
-        type: 'radio' as const,
-    };
-
-    const key = UIKey.charAt(0).toUpperCase() + UIKey.slice(1);
-
-    const Component = Combos[key as keyof typeof Combos];
-    return Component && <Component {...PropsData}>{children}</Component>;
+    const Component = Combos[UI as keyof typeof Combos];
+    return (
+        Component && (
+            <Component {...props} type="radio">
+                {children}
+            </Component>
+        )
+    );
 }
 
 export default RadioGroup;
-
-//TODO: Radio와 Checkbox 리팩토링
-//TODO: ICON 리팩토링
-//TODO: textInput 리팩토링
+// //TODO: Radio와 Checkbox 리팩토링
+// //TODO: ICON 리팩토링
+// //TODO: textInput 리팩토링

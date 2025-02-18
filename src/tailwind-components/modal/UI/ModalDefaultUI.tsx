@@ -33,7 +33,7 @@ export default function ModalDefaultUI({
     const contentsStyle = useMemo(() => [styles.defaultContents, styles[center ? 'center' : '']].join(' '), [center]);
 
     return (
-        <div {...props} className={boxStyle} onClick={e => e.stopPropagation()}>
+        <div {...props} className={boxStyle} onClick={(e) => e.stopPropagation()}>
             <div className={styles.topArea}>
                 <div className={styles.closeButtonBox}>
                     <button {...cbProps} type="button" className={closeBtn} onClick={onClose} name={name} />
@@ -43,6 +43,7 @@ export default function ModalDefaultUI({
             <Button
                 name={name}
                 onClick={props.onClick ? (props.onClick as unknown as OnClick) : onClose}
+                style={{ width: '100%' }}
                 className={buttonClassName}
                 {...bProps}
             >

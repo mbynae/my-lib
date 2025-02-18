@@ -3,16 +3,16 @@ import { classNames } from '../../../../function/className';
 import './Combo-tailwind.css';
 import type { ComboOptionProps, ComboType } from '../combo-type';
 
+type A = ComboOptionProps<'radio', 'default'>['optionProps'];
+
 function ComboDefault<T extends ComboType>({ children, type, optionProps, ...props }: ComboOptionProps<T, 'default'>) {
-    const labelProps = optionProps?.label;
-    const circleProps = optionProps?.circle;
-    const childrenProps = optionProps?.children;
+    const { label: labelProps, circle: circleProps, children: childrenProps } = optionProps || {};
 
     return (
         <label
             aria-label={`${type === 'radio' ? '라디오 버튼' : '체크박스'} 옵션`}
             {...labelProps}
-            className={classNames('combo-button', labelProps?.className)}
+            className={classNames('combo-default', labelProps?.className)}
             onClick={(e) => e.stopPropagation()}
         >
             <input {...props} type={type} className={classNames('input', props.className)} />

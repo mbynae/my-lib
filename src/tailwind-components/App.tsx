@@ -1,8 +1,8 @@
 import { useBooleanHandler, useCheckboxHandler, useInputHandler } from '../hooks/useInputHandler';
 
 import Form from './form/form/Form';
-import RadioGroup, { RadioOption } from './form/combo/RadioGroup';
-import CheckboxGroup, { CheckboxOption } from './form/combo/CheckboxGroup';
+import RadioGroup, { Radio } from './form/combo/RadioGroup';
+import CheckboxGroup, { Checkbox } from './form/combo/CheckboxGroup';
 import Button from './button/Button';
 
 import TextInput from './form/textInput/TextInput';
@@ -14,7 +14,7 @@ import styles from '../vanilla-components/App.module.css';
 function App() {
     const [input, setInput] = useInputHandler({
         text: '',
-        radio: '',
+        radio: '1',
         select: '3',
     });
     const [check, setCheck, allCheck] = useCheckboxHandler([]);
@@ -33,7 +33,7 @@ function App() {
 
         console.log(formData.get('select'));
 
-        // setModal((prev) => ({ ...prev, radioModal: true }));
+        setModal((prev) => ({ ...prev, radioModal: true }));
     };
 
     const onConfirm = () => {
@@ -45,47 +45,25 @@ function App() {
             <Form onSubmit={onSubmit} className="flex w-[400px] flex-col gap-[20px] border border-[#cdcdcd] p-[25px]">
                 <Form.Fieldset>
                     <Form.Legend>라디오 버튼</Form.Legend>
-                    <RadioGroup UIType="default" state={input.radio} name="radio" onChange={setInput}>
-                        <RadioOption value="1">1</RadioOption>
-                        <RadioOption value="2">2</RadioOption>
-                        <RadioOption value="3">3</RadioOption>
-                        <RadioOption value="4">4</RadioOption>
+                    <RadioGroup UIType="button" state={input.radio} name="radio" onChange={setInput}>
+                        <Radio value="1">1</Radio>
+                        <Radio value="2">2</Radio>
+                        <Radio value="3">3</Radio>
+                        <Radio value="4">4</Radio>
                     </RadioGroup>
                 </Form.Fieldset>
 
-                <Form.Fieldset>
+                {/* <Form.Fieldset>
                     <Form.Legend>체크박스 버튼</Form.Legend>
                     <CheckboxGroup UIType="button" state={check} onChange={setCheck} name="check" className="mb-5">
-                        <CheckboxOption value="1">1</CheckboxOption>
-                        <CheckboxOption value="2">2</CheckboxOption>
-                        <CheckboxOption value="3">3</CheckboxOption>
-                        <CheckboxOption value="4">4</CheckboxOption>
+                        <Checkbox value="1">1</Checkbox>
+                        <Checkbox value="2">2</Checkbox>
+                        <Checkbox value="3">3</Checkbox>
+                        <Checkbox value="4">4</Checkbox>
                     </CheckboxGroup>
                     <Button type="button" UIType="default" onClick={() => allCheck(['1', '2', '3', '4'])} className="w-full">
                         전체 선택
                     </Button>
-                </Form.Fieldset>
-
-                {/* <Form.Fieldset>
-                    <Form.Legend>셀렉트 박스 버튼</Form.Legend>
-                    <Select state={input.select} name="select" onChange={setInput}>
-                        <Select.Option value="">선택해주세요.</Select.Option>
-                        <Select.Option value="1">1번</Select.Option>
-                        <Select.Option value="2">2번</Select.Option>
-                        <Select.Option value="3">3번</Select.Option>
-                        <Select.Option value="4">4번</Select.Option>
-                    </Select>
-                </Form.Fieldset> */}
-
-                {/* <Form.Fieldset>
-                    <Form.Legend>셀렉트 박스 버튼2</Form.Legend>
-                    <Select2 state={input.select} onChange={setInput} name="select">
-                        <Select2.Option value="">선택해주세요.</Select2.Option>
-                        <Select2.Option value="1">1번</Select2.Option>
-                        <Select2.Option value="2">2번</Select2.Option>
-                        <Select2.Option value="3">3번</Select2.Option>
-                        <Select2.Option value="4">4번</Select2.Option>
-                    </Select2>
                 </Form.Fieldset> */}
 
                 <Form.Fieldset>
@@ -128,14 +106,14 @@ function App() {
                             label: { className: styles.modalRadioOption },
                         }}
                     >
-                        <RadioOption value="1">1</RadioOption>
-                        <RadioOption value="2">2</RadioOption>
-                        <RadioOption value="3">3</RadioOption>
-                        <RadioOption value="4">4</RadioOption>
-                        <RadioOption value="5">5</RadioOption>
-                        <RadioOption value="6">6</RadioOption>
-                        <RadioOption value="7">7</RadioOption>
-                        <RadioOption value="8">8</RadioOption>
+                        <Radio value="1">1</Radio>
+                        <Radio value="2">2</Radio>
+                        <Radio value="3">3</Radio>
+                        <Radio value="4">4</Radio>
+                        <Radio value="5">5</Radio>
+                        <Radio value="6">6</Radio>
+                        <Radio value="7">7</Radio>
+                        <Radio value="8">8</Radio>
                     </RadioGroup>
                 </div>
             </Modal>

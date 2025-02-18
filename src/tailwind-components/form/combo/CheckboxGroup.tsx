@@ -41,7 +41,7 @@ function CheckboxGroup<T extends ComboUIType = 'default'>({
     );
 }
 
-export function CheckboxOption<T extends ComboUIType = 'default'>({
+export function Checkbox<T extends ComboUIType = 'default'>({
     UIType = 'default',
     value,
     name,
