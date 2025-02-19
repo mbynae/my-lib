@@ -6,8 +6,8 @@ import RadioGroup, { RadioOption } from '../tailwind-components/form/combo/Radio
 import CheckboxGroup, { CheckboxOption } from '../tailwind-components/form/combo/CheckboxGroup';
 import Button from '../tailwind-components/button/Button';
 import Select from '../tailwind-components/form/select/Select';
-import TextInput from '../tailwind-components/form/textInput/TextInput';
-import PasswordInput from '../tailwind-components/password/PasswordInput';
+import TextInput from '../tailwind-components/form/textInput/TextField';
+import PasswordInput from '../tailwind-components/password/PasswordField';
 import Modal from '../tailwind-components/modal/Modal';
 
 function App() {

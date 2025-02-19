@@ -1,29 +1,29 @@
 import { DetailedHTMLProps, HTMLAttributes, HTMLProps, ReactElement, Ref } from 'react';
 import { IconProps } from '../../icon/icon-type';
 
-interface BaseSelectGroupProps<T extends SelectUIType>
+type BasicOption = {
+    wrap?: HTMLProps<HTMLDivElement>;
+    text?: HTMLProps<HTMLSpanElement>;
+    optionBox?: HTMLProps<HTMLDivElement>;
+    option?: HTMLProps<HTMLLabelElement>;
+    input?: DetailedHTMLProps<HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+};
+
+type OptionProps<T extends keyof SelectOptionConfig> = SelectOptionConfig[T] extends never
+    ? BasicOption
+    : BasicOption & SelectOptionConfig[T];
+
+export interface SelectGroupProps<T extends keyof SelectOptionConfig>
     extends DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
     children: ReactElement<SelectOptionProps>[] | ReactElement<SelectOptionProps>;
     UIType?: T;
     state?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     name?: string;
-    optionProps?: {
-        wrap?: HTMLProps<HTMLDivElement>;
-        text?: HTMLProps<HTMLSpanElement>;
-        optionBox?: HTMLProps<HTMLDivElement>;
-        option?: HTMLProps<HTMLLabelElement>;
-        input?: DetailedHTMLProps<HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
-    };
+    optionProps?: OptionProps<T>;
 }
 
-export type SelectGroupProps<T extends SelectUIType = 'default'> = T extends 'default'
-    ? BaseSelectGroupProps<T> & OptionProps['default']
-    : T extends 'line'
-      ? BaseSelectGroupProps<T> & OptionProps['line']
-      : BaseSelectGroupProps<T>;
-
-export type SelectProps<T extends SelectUIType> = Omit<SelectGroupProps<T>, 'ref' | 'onChange'> & {
+export type SelectProps<T extends keyof SelectOptionConfig> = Omit<SelectGroupProps<T>, 'ref' | 'onChange'> & {
     innerText: React.ReactNode;
     ref: Ref<HTMLDivElement>;
     active: boolean;
@@ -38,9 +38,7 @@ export interface SelectOptionProps {
 }
 
 // 추가 타입
-export type SelectUIType = 'default' | 'line';
-
-interface OptionProps {
-    default: { optionProps?: { icon?: Partial<IconProps> } };
-    line: { optionProps?: { icon?: Partial<IconProps>; line?: HTMLProps<HTMLSpanElement> } };
+export interface SelectOptionConfig {
+    default: { icon?: Partial<IconProps> };
+    line: { icon?: Partial<IconProps>; line?: HTMLProps<HTMLSpanElement> };
 }

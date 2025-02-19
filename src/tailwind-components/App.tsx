@@ -5,8 +5,8 @@ import RadioGroup, { Radio } from './form/combo/RadioGroup';
 import CheckboxGroup, { Checkbox } from './form/combo/CheckboxGroup';
 import Button from './button/Button';
 
-import TextInput from './form/textInput/TextInput';
-import PasswordInput from './password/PasswordInput';
+import TextField from './form/textInput/TextField';
+import PasswordField from './password/PasswordField';
 import Select from './form/select/Select';
 import Modal from './modal/Modal';
 import styles from '../vanilla-components/App.module.css';
@@ -45,7 +45,7 @@ function App() {
             <Form onSubmit={onSubmit} className="flex w-[400px] flex-col gap-[20px] border border-[#cdcdcd] p-[25px]">
                 <Form.Fieldset>
                     <Form.Legend>라디오 버튼</Form.Legend>
-                    <RadioGroup UIType="button" state={input.radio} onChange={setInput} name="radio">
+                    <RadioGroup state={input.radio} onChange={setInput} name="radio">
                         <Radio value="1">1</Radio>
                         <Radio value="2">2</Radio>
                         <Radio value="3">3</Radio>
@@ -74,7 +74,7 @@ function App() {
 
                 <Form.Fieldset>
                     <Form.Legend>셀렉트 박스 버튼</Form.Legend>
-                    <Select UIType="line" state={input.select} onChange={setInput} name="select">
+                    <Select UIType="default" state={input.select} onChange={setInput} name="select">
                         <Select.Option value="0">선택해주세요</Select.Option>
                         <Select.Option value="1">1번</Select.Option>
                         <Select.Option value="2">2번</Select.Option>
@@ -85,14 +85,14 @@ function App() {
 
                 <Form.Fieldset>
                     <Form.Legend>텍스트 입력 칸</Form.Legend>
-                    <TextInput
+                    <TextField
                         value={input.text}
                         onChange={setInput}
                         name="text"
                         placeholder="작성해주세요."
                         style={{ marginBottom: 10 }}
                     />
-                    <PasswordInput placeholder="비밀번호를 작성해주세요." />
+                    <PasswordField placeholder="비밀번호를 작성해주세요." />
                 </Form.Fieldset>
                 <Button UIType="text" className="m-auto">
                     제출

@@ -3,8 +3,6 @@ import { classNames } from '../../../../function/className';
 import './Combo-tailwind.css';
 import type { ComboOptionProps, ComboType } from '../combo-type';
 
-type A = ComboOptionProps<'radio', 'default'>['optionProps'];
-
 function ComboDefault<T extends ComboType>({ children, type, optionProps, ...props }: ComboOptionProps<T, 'default'>) {
     const { label: labelProps, circle: circleProps, children: childrenProps } = optionProps || {};
 

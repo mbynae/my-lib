@@ -3,10 +3,10 @@ import { useBooleanHandler } from '../../../hooks/useInputHandler';
 import { useCloseDropdown } from '../../../hooks/useSideEffect';
 
 import * as UI from './UI';
-import type { SelectGroupProps, SelectOptionProps, SelectUIType } from './select-type';
+import type { SelectGroupProps, SelectOptionProps, SelectOptionConfig } from './select-type';
 
-function Select<T extends SelectUIType = 'default'>({
-    UIType = 'default',
+function Select<T extends keyof SelectOptionConfig>({
+    UIType = 'default' as T,
     children,
     name,
     state,

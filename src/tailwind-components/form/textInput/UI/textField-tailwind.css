@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+
+@layer components {
+    .textField-default {
+        width: 100%;
+        padding: 5px 10px;
+        border: 1px solid var(--color-border-gray);
+        border-radius: 5px;
+        font-size: 0.9rem;
+
+        &:focus {
+            outline: none;
+        }
+        &::placeholder {
+            color: var(--color-disabled-color);
+            font-size: 0.9rem;
+        }
+    }
+}

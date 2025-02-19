@@ -3,9 +3,9 @@ import { Eq } from '../../../function/eq';
 import * as UI from './UI';
 import './UI/Combo-tailwind.css';
 
-import type { ComboUIType, ComboGroupProps, ComboOptionProps } from './combo-type';
+import type { ComboGroupProps, ComboOptionProps, ComboOptionConfig } from './combo-type';
 
-function CheckboxGroup<T extends ComboUIType = 'default'>({
+function CheckboxGroup<T extends keyof ComboOptionConfig>({
     UIType = 'default' as T,
     children,
     state,
@@ -13,8 +13,7 @@ function CheckboxGroup<T extends ComboUIType = 'default'>({
     ...props
 }: ComboGroupProps<'checkbox', T>) {
     const arrayChild = Array.isArray(children) ? children : [children];
-
-    const { group: groupProps, ...rest } = optionProps || {};
+    const groupProps = optionProps?.group;
 
     return (
         <div {...groupProps} aria-labelledby="체크박스 그룹" role="checkbox" className={`combo-common ${groupProps?.className}`}>
@@ -24,7 +23,7 @@ function CheckboxGroup<T extends ComboUIType = 'default'>({
                     UIType={UIType}
                     checked={state !== undefined ? Eq.arrElem(state, child.props.value) : undefined}
                     {...child.props}
-                    optionProps={rest}
+                    optionProps={optionProps}
                     {...props}
                 >
                     {child.props.children}
@@ -34,7 +33,11 @@ function CheckboxGroup<T extends ComboUIType = 'default'>({
     );
 }
 
-export function Checkbox<T extends ComboUIType>({ UIType = 'default' as T, children, ...props }: ComboOptionProps<'checkbox', T>) {
+export function Checkbox<T extends keyof ComboOptionConfig>({
+    UIType = 'default' as T,
+    children,
+    ...props
+}: ComboOptionProps<'checkbox', T>) {
     const key = UIType.charAt(0).toUpperCase() + UIType.slice(1);
 
     const Component = UI[key as keyof typeof UI];
