@@ -14,7 +14,7 @@ import styles from '../vanilla-components/App.module.css';
 function App() {
     const [input, setInput] = useInputHandler({
         text: '',
-        radio: '1',
+        radio: '',
         select: '3',
     });
     const [check, setCheck, allCheck] = useCheckboxHandler([]);
@@ -31,9 +31,9 @@ function App() {
 
         const formData = new FormData(e.currentTarget);
 
-        console.log(formData.get('select'));
+        console.log(formData.getAll('check'));
 
-        setModal((prev) => ({ ...prev, radioModal: true }));
+        // setModal((prev) => ({ ...prev, radioModal: true }));
     };
 
     const onConfirm = () => {
@@ -45,7 +45,7 @@ function App() {
             <Form onSubmit={onSubmit} className="flex w-[400px] flex-col gap-[20px] border border-[#cdcdcd] p-[25px]">
                 <Form.Fieldset>
                     <Form.Legend>라디오 버튼</Form.Legend>
-                    <RadioGroup state={input.radio} name="radio" onChange={setInput}>
+                    <RadioGroup UIType="button" state={input.radio} onChange={setInput} name="radio">
                         <Radio value="1">1</Radio>
                         <Radio value="2">2</Radio>
                         <Radio value="3">3</Radio>
@@ -74,7 +74,7 @@ function App() {
 
                 <Form.Fieldset>
                     <Form.Legend>셀렉트 박스 버튼</Form.Legend>
-                    <Select UIType="line" name="select">
+                    <Select UIType="line" state={input.select} onChange={setInput} name="select">
                         <Select.Option value="0">선택해주세요</Select.Option>
                         <Select.Option value="1">1번</Select.Option>
                         <Select.Option value="2">2번</Select.Option>
@@ -107,8 +107,8 @@ function App() {
                         name="modalRadio"
                         state={modalRadio}
                         onChange={setModalRadio}
-                        className={styles.modalRadio}
                         optionProps={{
+                            group: { className: styles.modalRadio },
                             label: { className: styles.modalRadioOption },
                         }}
                     >

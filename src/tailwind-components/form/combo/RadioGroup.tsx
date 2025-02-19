@@ -22,9 +22,9 @@ function RadioGroup<T extends ComboUIType = 'default'>({
                 <Radio
                     key={child.props.value}
                     UIType={UIType}
-                    checked={state === child.props.value}
-                    optionProps={rest}
+                    checked={state !== undefined ? state === child.props.value : undefined}
                     {...child.props}
+                    optionProps={rest}
                     {...props}
                 >
                     {child.props.children}
@@ -34,7 +34,7 @@ function RadioGroup<T extends ComboUIType = 'default'>({
     );
 }
 
-export function Radio<T extends ComboUIType>({ UIType = 'default', children, ...props }: ComboOptionProps<'radio', T>) {
+export function Radio<T extends ComboUIType = 'default'>({ UIType = 'default' as T, children, ...props }: ComboOptionProps<'radio', T>) {
     const UI = UIType.charAt(0).toUpperCase() + UIType.slice(1);
 
     const Component = Combos[UI as keyof typeof Combos];

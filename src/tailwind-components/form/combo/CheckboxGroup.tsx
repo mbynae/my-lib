@@ -6,7 +6,7 @@ import './UI/Combo-tailwind.css';
 import type { ComboUIType, ComboGroupProps, ComboOptionProps } from './combo-type';
 
 function CheckboxGroup<T extends ComboUIType = 'default'>({
-    UIType = 'default',
+    UIType = 'default' as T,
     children,
     state,
     optionProps,
@@ -22,9 +22,9 @@ function CheckboxGroup<T extends ComboUIType = 'default'>({
                 <Checkbox
                     key={child.props.value}
                     UIType={UIType}
-                    checked={state ? Eq.arrElem(state, child.props.value) : undefined}
-                    optionProps={rest}
+                    checked={state !== undefined ? Eq.arrElem(state, child.props.value) : undefined}
                     {...child.props}
+                    optionProps={rest}
                     {...props}
                 >
                     {child.props.children}
@@ -34,7 +34,7 @@ function CheckboxGroup<T extends ComboUIType = 'default'>({
     );
 }
 
-export function Checkbox<T extends ComboUIType = 'default'>({ UIType = 'default', children, ...props }: ComboOptionProps<'checkbox', T>) {
+export function Checkbox<T extends ComboUIType>({ UIType = 'default' as T, children, ...props }: ComboOptionProps<'checkbox', T>) {
     const key = UIType.charAt(0).toUpperCase() + UIType.slice(1);
 
     const Component = UI[key as keyof typeof UI];
