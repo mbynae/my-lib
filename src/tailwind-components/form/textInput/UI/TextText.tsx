@@ -11,5 +11,5 @@ export default function TextText({
     optionProps,
     ...props
 }: Omit<TextFieldProps<'text'>, 'UIType'>) {
-    return <input {...props} type={type} value={value} onChange={onChange} className={classNames('textField-default', className)} />;
+    return <input {...props} type={type} value={value} onChange={onChange} className={classNames('textField-text', className)} />;
 }

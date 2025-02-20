@@ -3,11 +3,10 @@ import { useBooleanHandler, useCheckboxHandler, useInputHandler } from '../hooks
 import Form from './form/form/Form';
 import RadioGroup, { Radio } from './form/combo/RadioGroup';
 import CheckboxGroup, { Checkbox } from './form/combo/CheckboxGroup';
-import Button from './button/Button';
-
-import TextField from './form/textInput/TextField';
-import PasswordField from './password/PasswordField';
 import Select from './form/select/Select';
+import TextField from './form/textInput/TextField';
+import TextFieldWithIcon from './form/textInput/TextFieldWithIcon';
+import Button from './button/Button';
 import Modal from './modal/Modal';
 import styles from '../vanilla-components/App.module.css';
 
@@ -33,11 +32,15 @@ function App() {
 
         console.log(formData.getAll('check'));
 
-        // setModal((prev) => ({ ...prev, radioModal: true }));
+        setModal((prev) => ({ ...prev, radioModal: true }));
     };
 
     const onConfirm = () => {
         setModal((prev) => ({ ...prev, alert: !prev.alert }));
+    };
+
+    const iconClick = (e?: React.MouseEvent<HTMLDivElement>) => {
+        console.log('아이콘 클릭');
     };
 
     return (
@@ -92,8 +95,22 @@ function App() {
                         placeholder="작성해주세요."
                         style={{ marginBottom: 10 }}
                     />
-                    <PasswordField placeholder="비밀번호를 작성해주세요." />
+                    <TextFieldWithIcon
+                        UIType="text"
+                        name="search"
+                        placeholder="서치 인풋"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') e.preventDefault();
+                        }}
+                        onKeyUp={(e) => {
+                            if (e.key === 'Enter') iconClick();
+                        }}
+                        optionProps={{
+                            icon: { className: 'cursor-pointer', onClick: iconClick },
+                        }}
+                    />
                 </Form.Fieldset>
+
                 <Button UIType="text" className="m-auto">
                     제출
                 </Button>

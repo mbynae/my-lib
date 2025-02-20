@@ -1,3 +1,4 @@
-import TextDefault from './TextDefault';
+import Default from './TextDefault';
+import Text from './TextText';
 
-export { TextDefault as Default };
+export { Default, Text };
