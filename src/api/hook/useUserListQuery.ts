@@ -33,10 +33,16 @@ export const useExampleMutate = (options?: UseMutationOption<USERLIST['Result'],
     return queryData;
 };
 
-export const userListQuery = <T = USERLIST['Result']>(params: USERLIST['Params'], options: UseQueryOption<USERLIST['Result'], T>) => {
+export const userListQuery = (params: USERLIST['Params']) => {
     return queryOptions({
         queryKey: [USERLIST_KEYS.userList, { ...params }],
         queryFn: () => fetchUsersList(params),
-        ...options,
+    });
+};
+
+const useUserList = () => {
+    const result = useQuery({
+        ...userListQuery({ id: 1 }),
+        select: (data) => data[0].id,
     });
 };
