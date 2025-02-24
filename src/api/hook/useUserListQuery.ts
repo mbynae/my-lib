@@ -39,10 +39,3 @@ export const userListQuery = (params: USERLIST['Params']) => {
         queryFn: () => fetchUsersList(params),
     });
 };
-
-const useUserList = () => {
-    const result = useQuery({
-        ...userListQuery({ id: 1 }),
-        select: (data) => data[0].id,
-    });
-};

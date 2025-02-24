@@ -1,7 +1,7 @@
-import { HTMLProps } from 'react';
+import { ComponentProps } from 'react';
 
 //추가할 옵션이 있으면 여기에 추가 후 옵션 값으로 넣기
-export interface IconProps extends HTMLProps<HTMLDivElement>, SvgProps {
+export interface IconProps extends ComponentProps<'div'>, SvgProps {
     icon: IconType;
     width?: number | string;
     height?: number | string;
@@ -28,11 +28,11 @@ type IconType =
     | 'modify'
     | 'group'
     | 'exel'
-    | 'directionArrow' 
-    | 'children' 
-    | 'adult' 
-    | 'online' 
-    | 'offline' 
+    | 'directionArrow'
+    | 'children'
+    | 'adult'
+    | 'online'
+    | 'offline'
     | 'reverse_Arrow'
     | 'check'
     | 'listEmpty';
