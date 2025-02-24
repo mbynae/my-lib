@@ -1,20 +1,19 @@
-import { DetailedHTMLProps, HTMLAttributes, HTMLProps, ReactElement, Ref } from 'react';
+import { ComponentProps, ReactElement, Ref } from 'react';
 import { IconProps } from '../../icon/icon-type';
 
 type BasicOption = {
-    wrap?: HTMLProps<HTMLDivElement>;
-    text?: HTMLProps<HTMLSpanElement>;
-    optionBox?: HTMLProps<HTMLDivElement>;
-    option?: HTMLProps<HTMLLabelElement>;
-    input?: DetailedHTMLProps<HTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+    wrap?: ComponentProps<'div'>;
+    text?: ComponentProps<'span'>;
+    optionBox?: ComponentProps<'div'>;
+    option?: ComponentProps<'label'>;
+    input?: ComponentProps<'input'>;
 };
 
 type OptionProps<T extends keyof SelectOptionConfig> = SelectOptionConfig[T] extends never
     ? BasicOption
     : BasicOption & SelectOptionConfig[T];
 
-export interface SelectGroupProps<T extends keyof SelectOptionConfig>
-    extends DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+export interface SelectGroupProps<T extends keyof SelectOptionConfig> extends ComponentProps<'input'> {
     children: ReactElement<SelectOptionProps>[] | ReactElement<SelectOptionProps>;
     UIType?: T;
     state?: string;
@@ -40,5 +39,5 @@ export interface SelectOptionProps {
 // 추가 타입
 export interface SelectOptionConfig {
     default: { icon?: Partial<IconProps> };
-    line: { icon?: Partial<IconProps>; line?: HTMLProps<HTMLSpanElement> };
+    line: { icon?: Partial<IconProps>; line?: ComponentProps<'span'> };
 }

@@ -1,7 +1,6 @@
-import { DetailedHTMLProps } from 'react';
+import { ComponentProps } from 'react';
 
-interface BaseProps<T extends keyof TextFieldConfig>
-    extends DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+interface BaseProps<T extends keyof TextFieldConfig> extends ComponentProps<'input'> {
     UIType?: T;
 }
 export type TextFieldProps<T extends keyof TextFieldConfig> = TextFieldConfig[T] extends never

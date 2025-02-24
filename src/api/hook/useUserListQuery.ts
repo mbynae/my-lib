@@ -1,8 +1,8 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { queryOptions, useMutation, useQuery } from '@tanstack/react-query';
 import { fetchUsersList } from '../fetch/fetch-api-userList';
 
-import type { USERLIST } from '../type/type-api-userList';
 import type { UseMutationOption, UseQueryOption } from '../type/common-query-type';
+import type { USERLIST } from '../type/type-api-userList';
 
 export const USERLIST_KEYS = {
     userList: 'userList',
@@ -26,9 +26,16 @@ export const useUserListQuery = <T = USERLIST['Result']>(params?: USERLIST['Para
 export const useExampleMutate = (options?: UseMutationOption<USERLIST['Result'], USERLIST['Params']>) => {
     const queryData = useMutation({
         // mutationKey: [],
-        mutationFn: params => fetchUsersList(params),
+        mutationFn: (params) => fetchUsersList(params),
         ...options,
     });
 
     return queryData;
+};
+
+export const userListQuery = (params: USERLIST['Params']) => {
+    return queryOptions({
+        queryKey: [USERLIST_KEYS.userList, { ...params }],
+        queryFn: () => fetchUsersList(params),
+    });
 };

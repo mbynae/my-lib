@@ -1,7 +1,6 @@
-import { DetailedHTMLProps } from 'react';
+import { ComponentProps } from 'react';
 
-interface BaseButtonProps<T extends ButtonUIType>
-    extends DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
+interface BaseButtonProps<T extends ButtonUIType> extends ComponentProps<'button'> {
     UIType?: T;
     children?: React.ReactNode;
 }

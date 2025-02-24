@@ -7,7 +7,7 @@ import TextField from './TextField';
 import type { IconProps } from '../../icon/icon-type';
 import type { TextFieldConfig, TextFieldProps } from './textField-type';
 
-interface Props<T> {
+interface Props {
     icon?: IconProps['icon'];
     iconDirection?: 'left' | 'right';
     optionProps?: {
@@ -22,7 +22,7 @@ const TextFieldWithIcon = <T extends keyof TextFieldConfig = 'default'>({
     iconDirection = 'left',
     optionProps,
     ...props
-}: Props<T> & TextFieldProps<T>) => {
+}: Props & TextFieldProps<T>) => {
     const { wrap: wrapProps, icon: iconProps, ...rest } = optionProps ?? {};
     const nextProps = Object.keys(rest).length ? { ...props, optionProps: rest } : { ...props };
 

@@ -1,11 +1,11 @@
-import { DetailedHTMLProps, HTMLProps, InputHTMLAttributes, ReactElement } from 'react';
+import { ComponentProps, ReactElement } from 'react';
 
-type Common = Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, 'type' | 'value'>;
+type Common = Omit<ComponentProps<'input'>, 'type' | 'value'>;
 
 type BasicOption = {
-    group?: HTMLProps<HTMLDivElement>;
-    label?: HTMLProps<HTMLLabelElement>;
-    children?: HTMLProps<HTMLDivElement>;
+    group?: ComponentProps<'div'>;
+    label?: ComponentProps<'label'>;
+    children?: ComponentProps<'div'>;
 };
 
 type OptionProps<T extends keyof ComboOptionConfig> = ComboOptionConfig[T] extends never ? BasicOption : BasicOption & ComboOptionConfig[T];
@@ -34,6 +34,6 @@ export interface ComboOptionProps<T extends ComboType, U extends keyof ComboOpti
 
 //추가 파트
 export type ComboOptionConfig = {
-    default: { circle?: HTMLProps<HTMLSpanElement> };
+    default: { circle?: ComponentProps<'span'> };
     button: never;
 };
