@@ -1,11 +1,20 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import styles from './App.module.css';
 
-export default function App() {
-    const totalPage = 10;
-    const moveValue = totalPage > 2 ? 20 : 50;
+function moveCal(totalPage: number) {
+    return {
+        moveValue: totalPage === 1 ? 0 : totalPage === 2 ? 33.3333 : 20,
+        initMove: totalPage === 1 ? 0 : totalPage === 2 ? -33.3333 : -40,
+        slideLength: totalPage === 1 ? 1 : totalPage === 2 ? 3 : 5,
+    };
+}
 
-    const [move, setMove] = useState(totalPage > 2 ? -40 : 0);
+export default function App() {
+    const totalPage = 20;
+    const moveData = useMemo(() => moveCal(totalPage), [totalPage]);
+    const moveValue = moveData.moveValue;
+
+    const [move, setMove] = useState(moveData.initMove);
     const [direction, setDirection] = useState('');
     const [transition, setTransition] = useState(0.5);
     const [data, setData] = useState(
@@ -15,9 +24,9 @@ export default function App() {
             { num: 3, bgc: '#49c55c' },
             { num: 4, bgc: '#4996c5' },
             { num: 5, bgc: '#8749c5' },
-        ].toSpliced(totalPage > 2 ? 5 : totalPage),
+        ].toSpliced(moveData.slideLength),
     );
-    const [page, setPage] = useState(5);
+    const [page, setPage] = useState(1);
 
     const prevClick = () => {
         if (!direction) {
@@ -42,7 +51,7 @@ export default function App() {
         setTransition(0);
 
         if (direction === 'prev') {
-            setData((prev) => [prev[4], ...prev.filter((_, i) => i !== prev.length - 1)]);
+            setData((prev) => [prev[prev.length - 1], ...prev.filter((_, i) => i !== prev.length - 1)]);
             setMove((prev) => prev - moveValue);
             return;
         }
@@ -54,7 +63,11 @@ export default function App() {
         }
 
         if (direction === 'first') {
-            setData((prev) => [prev[3], prev[4], ...prev.filter((_, i) => i !== prev.length - 1 && i !== prev.length - 2)]);
+            setData((prev) => [
+                prev[prev.length - 2],
+                prev[prev.length - 1],
+                ...prev.filter((_, i) => i !== prev.length - 1 && i !== prev.length - 2),
+            ]);
             setMove((prev) => prev - moveValue * 2);
             return;
         }
