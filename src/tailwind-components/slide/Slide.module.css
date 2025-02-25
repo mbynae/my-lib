@@ -22,10 +22,6 @@
     height: 100%;
 }
 
-.buttonBox {
-    color: #fff;
-}
-
 .leftBtn {
     display: block;
     width: 80px;
@@ -37,6 +33,7 @@
     top: 50%;
     translate: -100% -50%;
     cursor: pointer;
+    color: #fff;
 }
 
 .rightBtn {
@@ -50,6 +47,7 @@
     top: 50%;
     translate: 100% -50%;
     cursor: pointer;
+    color: #fff;
 }
 
 .pagenation {
@@ -71,4 +69,7 @@
     align-items: center;
     cursor: pointer;
     transition: background-color 0.15s;
+}
+.pageBtn:disabled {
+    background-color: #5262c7;
 }

@@ -1,8 +1,9 @@
 import { FC, useMemo, useRef, useState } from 'react';
+import { classNames } from '../../function/className';
 import { compose } from '../../function/compose';
 
 import styles from './Slide.module.css';
-import type { SlideButtonType, SlideConfigType } from './slide-type';
+import type { SlideButtonType, SlideConfigType, SlidePagenationType } from './slide-type';
 
 //슬라이드 생성 함수
 function getSlideConfig(totalPage: number, duration: number, view: number = 1) {
@@ -28,6 +29,7 @@ interface Props {
     duration?: number;
     slideEnabled?: boolean;
     buttonProps?: SlideButtonType;
+    pagenationProps?: SlidePagenationType;
 }
 
 const SlideGroup = ({
@@ -36,7 +38,8 @@ const SlideGroup = ({
     initPage = 1,
     duration = 0.5,
     slideEnabled = false,
-    buttonProps = { enabled: true, prev: undefined, next: undefined },
+    buttonProps: { enabled: btnEnabled = true, prevBtn, nextBtn } = {},
+    pagenationProps: { enabled: pagingEnabled = false, pagenation } = {},
 }: Props) => {
     //init
     const slideConfig = useMemo(() => getSlideConfig(totalPage, duration), [totalPage, duration]); //슬라이드 조정 변수
@@ -151,13 +154,10 @@ const SlideGroup = ({
 
     const onPageInfoEvent = (index: number) => compose(getPageInfo(index), getSlidePage)(index); //api 페이지 및 파라미터 통합 함수
 
-    const getButtonInfo = (direction: 'prev' | 'next') => ({
-        direction: direction,
-    });
-
     //optionProps
-    const { renderItem: LeftButton, ...prevProps } = buttonProps.prev || {};
-    const { renderItem: RightButton, ...nextProps } = buttonProps.next || {};
+    const { renderItem: PrevButton, ...prevProps } = prevBtn || {};
+    const { renderItem: NextButton, ...nextProps } = nextBtn || {};
+    const { renderItem: Pagenation, ...pagingProps } = pagenation || {};
 
     //drag Item
     const onDrag = useRef(false);
@@ -217,44 +217,131 @@ const SlideGroup = ({
                     })}
                 </div>
 
-                {buttonProps.enabled && slideConfig.totalPage > 1 && (
-                    <div className={styles.buttonBox}>
-                        {!LeftButton ? (
-                            <button {...prevProps} className={styles.leftBtn} onClick={prevClick}>
-                                PREV
-                            </button>
-                        ) : (
-                            <LeftButton buttonInfo={getButtonInfo('prev')} slideConfig={slideConfig} onClick={prevClick} />
-                        )}
-                        {!RightButton ? (
-                            <button {...nextProps} className={styles.rightBtn} onClick={nextClick}>
-                                NEXT
-                            </button>
-                        ) : (
-                            <RightButton buttonInfo={getButtonInfo('next')} slideConfig={slideConfig} onClick={nextClick} />
-                        )}
-                    </div>
-                )}
+                <DefaultButton
+                    enabled={btnEnabled && slideConfig.totalPage > 1}
+                    prevClick={prevClick}
+                    nextClick={nextClick}
+                    prevProps={prevProps}
+                    nextProps={nextProps}
+                    slideConfig={slideConfig}
+                    PrevButton={PrevButton}
+                    NextButton={NextButton}
+                />
 
-                <div className={styles.pagenation}>
-                    {Array.from({ length: slideConfig.totalPage }, (_, i) => i + 1).map((e) => (
-                        <button
-                            key={e}
-                            className={styles.pageBtn}
-                            onClick={() => pageClick(e)}
-                            disabled={e === page}
-                            style={{ backgroundColor: e === prePage ? '#5262c7' : undefined }}
-                        >
-                            {e}
-                        </button>
-                    ))}
-                </div>
+                <DefaultPagenation
+                    enabled={pagingEnabled}
+                    totalPage={slideConfig.totalPage}
+                    page={page}
+                    prePage={prePage}
+                    initPage={initPage}
+                    direction={direction}
+                    slideConfig={slideConfig}
+                    pageClick={pageClick}
+                    optionProps={pagingProps}
+                    Pagenation={Pagenation}
+                />
             </div>
         </div>
     );
 };
 
 export default SlideGroup;
+
+type ButtonType = NonNullable<SlideButtonType['nextBtn']>;
+interface ButtonRrops {
+    enabled: boolean;
+    prevClick: () => void;
+    nextClick: () => void;
+    slideConfig: SlideConfigType['slideConfig'];
+    prevProps?: Omit<ButtonType, 'renderItem'>;
+    nextProps?: Omit<ButtonType, 'renderItem'>;
+    PrevButton?: ButtonType['renderItem'];
+    NextButton?: ButtonType['renderItem'];
+}
+const DefaultButton = ({ enabled, prevClick, nextClick, prevProps, nextProps, slideConfig, PrevButton, NextButton }: ButtonRrops) => {
+    if (!enabled) return;
+
+    const getButtonInfo = (direction: 'prev' | 'next') => ({
+        direction: direction,
+    });
+
+    return (
+        <>
+            {!PrevButton ? (
+                <button {...prevProps} className={classNames(styles.leftBtn, prevProps?.className)} onClick={prevClick}>
+                    PREV
+                </button>
+            ) : (
+                <PrevButton buttonInfo={getButtonInfo('prev')} slideConfig={slideConfig} onClick={prevClick} />
+            )}
+            {!NextButton ? (
+                <button {...nextProps} className={classNames(styles.rightBtn, nextProps?.className)} onClick={nextClick}>
+                    NEXT
+                </button>
+            ) : (
+                <NextButton buttonInfo={getButtonInfo('next')} slideConfig={slideConfig} onClick={nextClick} />
+            )}
+        </>
+    );
+};
+
+type PagenationType = NonNullable<SlidePagenationType['pagenation']>;
+interface PagenationProps {
+    enabled: boolean;
+    totalPage: number;
+    initPage: number;
+    direction: SlideConfigType['pageInfo']['direction'];
+    page: number;
+    prePage: number;
+    slideConfig: SlideConfigType['slideConfig'];
+    pageClick: (num: number) => void;
+    optionProps?: Omit<PagenationType, 'renderItem'>;
+    Pagenation?: PagenationType['renderItem'];
+}
+
+const DefaultPagenation = ({
+    enabled,
+    totalPage,
+    page,
+    prePage,
+    initPage,
+    direction,
+    slideConfig,
+    pageClick,
+    optionProps,
+    Pagenation,
+}: PagenationProps) => {
+    if (!enabled) return;
+
+    if (Pagenation) {
+        const pageInfo = {
+            totalPage: totalPage,
+            page: prePage,
+            initPage: initPage,
+            direction: direction,
+        };
+
+        return <Pagenation slideConfig={slideConfig} pageInfo={pageInfo} onClick={pageClick} />;
+    }
+
+    const { wrap: warpProps, pageBtn: buttonProps } = optionProps || {};
+
+    return (
+        <div {...warpProps} className={classNames(styles.pagenation, warpProps?.className)}>
+            {Array.from({ length: totalPage }, (_, i) => i + 1).map((num) => (
+                <button
+                    key={num}
+                    className={classNames(styles.pageBtn, buttonProps?.className)}
+                    onClick={() => pageClick(num)}
+                    disabled={num === prePage}
+                    // style={{ backgroundColor: num === prePage ? '#5262c7' : undefined }}
+                >
+                    {num}
+                </button>
+            ))}
+        </div>
+    );
+};
 
 //페이지네이션 및 옵션Props 추가
 //드래그앤드롭 완성

@@ -1,4 +1,4 @@
-import { Component, ComponentProps, FC } from 'react';
+import { ComponentProps, FC } from 'react';
 
 export interface SlideConfigType {
     pageInfo: PageInfo;
@@ -7,11 +7,24 @@ export interface SlideConfigType {
 
 export interface SlideButtonType {
     enabled?: boolean;
-    prev?: ComponentProps<'button'> & { renderItem?: FC<SlideButtonProps> };
-    next?: ComponentProps<'button'> & { renderItem?: FC<SlideButtonProps> };
+    prevBtn?: ComponentProps<'button'> & { renderItem?: FC<SlideButtonProps> };
+    nextBtn?: ComponentProps<'button'> & { renderItem?: FC<SlideButtonProps> };
 }
 
 export type SlideButtonProps = Pick<SlideConfigType, 'slideConfig'> & ButtonInfo & { onClick: (e?: React.MouseEvent<HTMLElement>) => void };
+
+export interface SlidePagenationType {
+    enabled?: boolean;
+    pagenation?: {
+        wrap?: ComponentProps<'div'>;
+        pageBtn?: ComponentProps<'button'>;
+        renderItem?: FC<SlidePagenationProps>;
+    };
+}
+
+export type SlidePagenationProps = Pick<SlideConfigType, 'slideConfig'> & { pageInfo: Omit<PageInfo, 'viewPage' | 'enabled'> } & {
+    onClick: (page: number) => void;
+};
 
 type SlideConfig = {
     totalPage: number; //전체 페이지

@@ -1,7 +1,7 @@
 import SlideGroup from '../tailwind-components/slide/Slide';
 import styles from './App.module.css';
 
-import type { SlideButtonProps, SlideConfigType } from '../tailwind-components/slide/slide-type';
+import type { SlideButtonProps, SlideConfigType, SlidePagenationProps } from '../tailwind-components/slide/slide-type';
 
 const data = [
     { num: 1, bgc: '#C54949' },
@@ -24,9 +24,12 @@ export default function App() {
                     totalPage={10}
                     renderItem={(props) => <Contents {...props} />}
                     buttonProps={{
+                        prevBtn: { renderItem: (props) => <SlideButton {...props} /> },
+                        nextBtn: { renderItem: (props) => <SlideButton {...props} /> },
+                    }}
+                    pagenationProps={{
                         enabled: true,
-                        prev: { renderItem: (props) => <SlideButton {...props} /> },
-                        next: { renderItem: (props) => <SlideButton {...props} /> },
+                        pagenation: { renderItem: (props) => <Pagenation {...props} item={data} /> },
                     }}
                 />
             </div>
@@ -65,5 +68,38 @@ const SlideButton = ({ buttonInfo, onClick }: SlideButtonProps) => {
         >
             {direction === 'prev' ? '좌측' : '우측'}버튼
         </button>
+    );
+};
+
+const Pagenation = ({ item, onClick, pageInfo }: SlidePagenationProps & { item: typeof data }) => {
+    return (
+        <div
+            style={{
+                position: 'absolute',
+                left: '50%',
+                bottom: 10,
+                translate: '-50% 0',
+                display: 'flex',
+                gap: 10,
+            }}
+        >
+            {item.map((e) => (
+                <button
+                    key={e.num}
+                    style={{
+                        width: 30,
+                        height: 30,
+                        borderRadius: '50%',
+                        backgroundColor: pageInfo.page === e.num ? '#fff' : e.bgc,
+                        border: '1px solid #fff',
+                        color: pageInfo.page === e.num ? '#000' : '#fff',
+                        cursor: 'pointer',
+                    }}
+                    onClick={() => onClick(e.num)}
+                >
+                    {e.num}
+                </button>
+            ))}
+        </div>
     );
 };
