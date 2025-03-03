@@ -26,6 +26,8 @@ export type SlidePagenationProps = Pick<SlideConfigType, 'slideConfig'> & { page
     onClick: (page: number) => void;
 };
 
+export type SlideOptionProps = { wrap?: ComponentProps<'div'>; inner?: ComponentProps<'div'>; slide?: ComponentProps<'div'> };
+
 type SlideConfig = {
     totalPage: number; //전체 페이지
     slideLength: number; //슬라이드 배열 길이

@@ -1,9 +1,10 @@
-import { FC, useMemo, useRef, useState } from 'react';
+import { type FC, useEffect, useMemo, useRef, useState } from 'react';
 import { classNames } from '../../function/className';
 import { compose } from '../../function/compose';
 
 import styles from './Slide.module.css';
-import type { SlideButtonType, SlideConfigType, SlidePagenationType } from './slide-type';
+import type { SlideButtonType, SlideConfigType, SlideOptionProps, SlidePagenationType } from './slide-type';
+import { splitVendorChunkPlugin } from 'vite';
 
 //슬라이드 생성 함수
 function getSlideConfig(totalPage: number, duration: number, view: number = 1) {
@@ -30,6 +31,7 @@ interface Props {
     slideEnabled?: boolean;
     buttonProps?: SlideButtonType;
     pagenationProps?: SlidePagenationType;
+    optionProps?: SlideOptionProps;
 }
 
 const SlideGroup = ({
@@ -40,9 +42,11 @@ const SlideGroup = ({
     slideEnabled = false,
     buttonProps: { enabled: btnEnabled = true, prevBtn, nextBtn } = {},
     pagenationProps: { enabled: pagingEnabled = false, pagenation } = {},
+    optionProps: { wrap: wrapProps, inner: innerProps, slide: slideProps } = {},
 }: Props) => {
     //init
-    const slideConfig = useMemo(() => getSlideConfig(totalPage, duration), [totalPage, duration]); //슬라이드 조정 변수
+    const slideContainer = useRef<HTMLDivElement>(null);
+    const slideConfig = useMemo(() => getSlideConfig(totalPage, duration), [totalPage, duration, slideContainer.current]); //슬라이드 조정 변수
 
     //state
     const [move, setMove] = useState(-slideConfig.initMove); //슬라이드 이동거리
@@ -160,12 +164,69 @@ const SlideGroup = ({
     const { renderItem: Pagenation, ...pagingProps } = pagenation || {};
 
     //drag Item
+
     const onDrag = useRef(false);
+    const slideWidth = useRef(0);
     const dragStartX = useRef(0);
+    const dragTime = useRef(0);
+
+    const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!direction) {
+            slideWidth.current = e.currentTarget.clientWidth / slideConfig.slideLength;
+            onDrag.current = true;
+            dragStartX.current = e.clientX;
+            dragTime.current = new Date().getTime();
+        }
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+        if (onDrag.current) {
+            slideContainer.current!.style.transition = `all 0s`;
+            slideContainer.current!.style.translate = `calc(${move}% - ${dragStartX.current - e.clientX}px) 0`;
+        }
+    };
+
+    const onMouseUp = (e: MouseEvent) => {
+        if (onDrag.current) {
+            onDrag.current = false;
+
+            if (new Date().getTime() - dragTime.current < 250) {
+                if (dragStartX.current - e.clientX > 50) nextClick();
+                else if (dragStartX.current - e.clientX < -50) prevClick();
+                else slideContainer.current!.style.translate = `calc(${move}%) 0`;
+                slideContainer.current!.style.transition = `all ${transition}s ease-in-out`;
+                dragStartX.current = 0;
+                dragTime.current = 0;
+                return;
+            }
+
+            if (dragStartX.current - e.clientX > slideWidth.current / 2) {
+                nextClick();
+            } else if (dragStartX.current - e.clientX < -slideWidth.current / 2) {
+                prevClick();
+            } else {
+                slideContainer.current!.style.transition = `all ${transition}s ease-in-out`;
+                slideContainer.current!.style.translate = `calc(${move}%) 0`;
+            }
+
+            dragStartX.current = 0;
+            dragTime.current = 0;
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+
+        return () => {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        };
+    }, []);
 
     return (
-        <div className={styles.container}>
-            <div className={styles.inner}>
+        <div {...wrapProps} className={classNames(styles.container, wrapProps?.className)}>
+            <div {...innerProps} className={classNames(styles.inner, innerProps?.className)}>
                 <div
                     className={styles.slideContainer}
                     style={{
@@ -173,44 +234,18 @@ const SlideGroup = ({
                         translate: `${move}% 0`,
                         transition: `all ${transition}s ease-in-out`,
                     }}
+                    ref={slideContainer}
                     onTransitionEnd={onTransitionEnd}
-                    // onMouseDown={(e) => {
-                    //     if (!direction) {
-                    //         onDrag.current = true;
-                    //         dragStartX.current = e.clientX;
-                    //     }
-                    // }}
-                    // onMouseMove={(e) => {
-                    //     if (onDrag.current) {
-                    //         e.currentTarget.style.transition = `all 0s`;
-                    //         e.currentTarget.style.translate = `calc(${move}% - ${dragStartX.current - e.clientX}px) 0`;
-                    //     }
-                    // }}
-                    // onMouseLeave={(e) => {
-                    //     if (onDrag.current) {
-                    //         e.currentTarget.style.transition = `all ${transition}s ease-in-out`;
-                    //         nextClick();
-                    //         onDrag.current = false;
-                    //         dragStartX.current = 0;
-                    //     }
-                    // }}
-                    // onMouseUp={(e) => {
-                    //     if (onDrag.current) {
-                    //         e.currentTarget.style.transition = `all ${transition}s ease-in-out`;
-                    //         nextClick();
-                    //         onDrag.current = false;
-                    //         dragStartX.current = 0;
-                    //     }
-                    // }}
+                    onMouseDown={onMouseDown}
                 >
                     {slideConfig.slideArr.map((slide, index) => {
                         const pageInfo = onPageInfoEvent(index + 1);
 
                         if (!Slide || !pageInfo.enabled) {
-                            return <div key={slide} className={styles.slide}></div>;
+                            return <div {...slideProps} key={slide} className={classNames(styles.slide, slideProps?.className)}></div>;
                         }
                         return (
-                            <div key={slide} className={styles.slide}>
+                            <div {...slideProps} key={slide} className={classNames(styles.slide, slideProps?.className)}>
                                 <Slide pageInfo={pageInfo} slideConfig={slideConfig} />
                             </div>
                         );
@@ -302,7 +337,6 @@ interface PagenationProps {
 const DefaultPagenation = ({
     enabled,
     totalPage,
-    page,
     prePage,
     initPage,
     direction,
@@ -334,7 +368,6 @@ const DefaultPagenation = ({
                     className={classNames(styles.pageBtn, buttonProps?.className)}
                     onClick={() => pageClick(num)}
                     disabled={num === prePage}
-                    // style={{ backgroundColor: num === prePage ? '#5262c7' : undefined }}
                 >
                     {num}
                 </button>
@@ -343,7 +376,6 @@ const DefaultPagenation = ({
     );
 };
 
-//페이지네이션 및 옵션Props 추가
-//드래그앤드롭 완성
+//드래그앤드롭 완성 - 코드 리팩토링 및 훅스로 분리
 //오토플레이 완성
 //view 완성

@@ -18,22 +18,24 @@ const data = [
 
 export default function App() {
     return (
-        <div className={styles.wrap}>
-            <div className={styles.wrapInner}>
-                <SlideGroup
-                    totalPage={10}
-                    renderItem={(props) => <Contents {...props} />}
-                    buttonProps={{
-                        prevBtn: { renderItem: (props) => <SlideButton {...props} /> },
-                        nextBtn: { renderItem: (props) => <SlideButton {...props} /> },
-                    }}
-                    pagenationProps={{
-                        enabled: true,
-                        pagenation: { renderItem: (props) => <Pagenation {...props} item={data} /> },
-                    }}
-                />
+        <>
+            <div className={styles.wrap}>
+                <div className={styles.wrapInner}>
+                    <SlideGroup
+                        totalPage={10}
+                        renderItem={(props) => <Contents {...props} />}
+                        buttonProps={{
+                            prevBtn: { renderItem: (props) => <SlideButton {...props} /> },
+                            nextBtn: { renderItem: (props) => <SlideButton {...props} /> },
+                        }}
+                        pagenationProps={{
+                            enabled: true,
+                            pagenation: { renderItem: (props) => <Pagenation {...props} item={data} /> },
+                        }}
+                    />
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 
