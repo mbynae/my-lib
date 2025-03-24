@@ -1,53 +1,43 @@
-import { DetailedHTMLProps, DetailsHTMLAttributes, HTMLProps, useMemo } from 'react';
+import { classNames } from '../../../function/className';
+
 import Button from '../../button/Button';
-import styles from '../Modal.module.css';
-import { ButtonProps } from '../../button/button-type';
+import './modal-tailwind.css';
 
-interface Props extends HTMLProps<HTMLDivElement> {
-    children: React.ReactNode;
-    onClose?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    buttonText?: string;
-    buttonClassName?: string;
-    center?: boolean;
-    closeBtnProps?: DetailedHTMLProps<DetailsHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
-    btnProps?: ButtonProps;
-}
+import type { ModalContentsProps } from '../modal-type';
 
-type OnClick = (e: React.MouseEvent<HTMLButtonElement>) => void;
-
-export default function ModalDefaultUI({
-    children,
-    onClose,
-    buttonText = '확인',
-    center = false,
-    buttonClassName,
-    className, //wrap div className
-    name,
-    closeBtnProps: cbProps, //closeBtn Props
-    btnProps: bProps, // bottom btn props,
-    ...props
-}: Props) {
-    const boxStyle = useMemo(() => [styles.defaultBox, className].join(' '), [className]);
-    const closeBtn = useMemo(() => [styles.closeButton, cbProps?.className].join(' '), [cbProps?.className]);
-
-    const contentsStyle = useMemo(() => [styles.defaultContents, styles[center ? 'center' : '']].join(' '), [center]);
+export default function ModalDefaultUI({ children, onClose, onClick, title, name, optionProps }: ModalContentsProps<'default'>) {
+    const { wrap: wrapProps, closeBtn: closeBtnProps, contents: contentsProps, button: buttonProps, buttonText } = optionProps || {};
 
     return (
-        <div {...props} className={boxStyle} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.topArea}>
-                <div className={styles.closeButtonBox}>
-                    <button {...cbProps} type="button" className={closeBtn} onClick={onClose} name={name} />
+        <div {...wrapProps} className={classNames('modal-default', wrapProps?.className)} onClick={(e) => e.stopPropagation()}>
+            <div className="_topArea">
+                <div className="_closeBtnBox">
+                    <button
+                        {...closeBtnProps}
+                        type="button"
+                        className={classNames('_closeBtn', closeBtnProps?.className)}
+                        onClick={onClose}
+                        name={name}
+                    />
                 </div>
-                <div className={contentsStyle}>{children}</div>
+                <div
+                    {...contentsProps}
+                    className={classNames(
+                        '_contents',
+                        contentsProps?.center ? 'flex items-center justify-center' : '',
+                        contentsProps?.className,
+                    )}
+                >
+                    {children}
+                </div>
             </div>
             <Button
                 name={name}
-                onClick={props.onClick ? (props.onClick as unknown as OnClick) : onClose}
-                style={{ width: '100%' }}
-                className={buttonClassName}
-                {...bProps}
+                onClick={onClick ? onClick : onClose}
+                className={classNames('w-full', buttonProps?.className)}
+                {...buttonProps}
             >
-                {buttonText}
+                {buttonText ?? '확인'}
             </Button>
         </div>
     );

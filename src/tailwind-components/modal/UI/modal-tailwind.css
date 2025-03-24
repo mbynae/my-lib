@@ -1,0 +1,88 @@
+@import 'tailwindcss';
+
+@layer components {
+    .modal-backgroundOveray {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        left: 0;
+        top: 0;
+        background-color: rgba(0, 0, 0, 0.4);
+        user-select: none;
+        z-index: 1001;
+        overflow: hidden;
+    }
+
+    .modal-default {
+        min-width: 400px;
+        min-height: 200px;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 1px 1px 8px 2px rgba(0, 0, 0, 0.2);
+        background-color: #fff;
+        border: 1px solid #666;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        translate: -50% -50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+
+        ._topArea {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            ._closeBtnBox {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+
+                ._closeBtn {
+                    width: 24px;
+                    height: 24px;
+                    position: relative;
+                    cursor: pointer;
+
+                    &::before {
+                        content: '';
+                        width: 100%;
+                        height: 1px;
+                        background-color: #303030;
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        translate: -50% -50%;
+                        rotate: 45deg;
+                    }
+
+                    &::after {
+                        content: '';
+                        width: 100%;
+                        height: 1px;
+                        background-color: #303030;
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        translate: -50% -50%;
+                        rotate: -45deg;
+                    }
+                }
+            }
+
+            ._contents {
+                min-height: calc(200px - 97.6px);
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+}

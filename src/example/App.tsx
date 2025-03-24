@@ -2,6 +2,7 @@ import SlideGroup from '../tailwind-components/slide/Slide';
 import styles from './App.module.css';
 
 import type { SlideButtonProps, SlideConfigType, SlidePagenationProps } from '../tailwind-components/slide/slide-type';
+import { Link } from 'react-router';
 
 const data = [
     { num: 1, bgc: '#C54949' },
@@ -19,6 +20,10 @@ const data = [
 export default function App() {
     return (
         <>
+            <Link to="/drag" viewTransition>
+                드래그
+            </Link>
+
             <div className={styles.wrap}>
                 <div className={styles.wrapInner}>
                     <SlideGroup

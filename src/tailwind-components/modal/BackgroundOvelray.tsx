@@ -1,32 +1,31 @@
 import { useEffect, useRef } from 'react';
-import styles from './BackgroundOveray.module.css';
+import './UI/modal-tailwind.css';
 
-interface Props {
-    children: React.ReactNode;
-    isOpen?: boolean;
-    onClose?: boolean;
-    clickActive?: boolean;
-    onClick?: (e: React.MouseEvent<HTMLElement>) => void;
-    name?: string;
-}
+import type { BackgroundOverayProps } from './modal-type';
 
-const BackgroundOverlay = ({ children, isOpen = true, clickActive = true, onClick, name }: Props) => {
+type MouseEvent = (e: React.MouseEvent<HTMLElement>) => void;
+const BackgroundOverlay = ({ children, isShowBg = true, bgClickActive = true, onClose, name }: BackgroundOverayProps) => {
     const bg = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (isOpen) {
-            bg.current?.previousElementSibling?.classList.remove(styles.background);
+        if (isShowBg) {
+            bg.current?.previousElementSibling?.classList.remove('modal-backgroundOveray');
             document.getElementById('body')!.style.overflow = 'hidden';
         }
 
         return () => {
-            document.getElementById('modal')!.lastElementChild?.classList.add(styles.background);
+            document.getElementById('modal')!.lastElementChild?.classList.add('modal-backgroundOveray');
             document.getElementById('body')!.style.overflow = 'auto';
         };
-    }, [isOpen]);
+    }, [isShowBg]);
 
     return (
-        <div className={styles.background} onClick={isOpen && clickActive ? onClick : () => {}} data-name={name} ref={bg}>
+        <div
+            className="modal-backgroundOveray"
+            onClick={isShowBg && bgClickActive ? (onClose as MouseEvent) : () => {}}
+            data-name={name}
+            ref={bg}
+        >
             {children}
         </div>
     );
