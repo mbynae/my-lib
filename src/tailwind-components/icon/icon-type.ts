@@ -35,4 +35,5 @@ type IconType =
     | 'offline'
     | 'reverse_Arrow'
     | 'check'
-    | 'listEmpty';
+    | 'listEmpty'
+    | 'transition';

@@ -141,7 +141,7 @@ function App() {
                 </div>
             </Modal>
 
-            <Modal isOpen={modal.alert} name="alert" center onClick={setModal} onClose={setModal}>
+            <Modal isOpen={modal.alert} name="alert" onClick={setModal} onClose={setModal}>
                 {modalRadio}번을 선택하셨습니다.
             </Modal>
         </div>

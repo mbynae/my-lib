@@ -20,6 +20,8 @@ import ExelIcon from './ExelIcon';
 import DirectionArrowIcon from './DirectionArrowIcon';
 import CheckIcon from './CheckIcon';
 import ListEmptyIcon from './ListEmptyIcon';
+import Transition from './TransitionIcon';
+
 //여기에 추가한 파일 export (이름 변경시 /호출한 파일 as 변경할 파일 이름/ 형태로 변경경)
 export {
     SettingIcon as Setting,
@@ -44,4 +46,5 @@ export {
     DirectionArrowIcon as DirectionArrow,
     CheckIcon as Check,
     ListEmptyIcon as ListEmpty,
+    Transition,
 };

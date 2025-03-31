@@ -1,9 +1,6 @@
 @import 'tailwindcss';
 
 @layer theme, base, components, utilities;
-@import 'tailwindcss/theme.css' layer(theme);
-@import 'tailwindcss/preflight.css' layer(base);
-@import 'tailwindcss/utilities.css' layer(utilities);
 
 @theme {
     /* color */
@@ -25,4 +22,27 @@
 
     /* size */
     --text-font-size: 16px;
+
+    /* my-lib */
+    --color-theme-main: #44656e;
+    --color-theme-thin: #f5f9fb;
+    --color-text-main: #3a354e;
+    --color-text-thin: #666666;
+    --color-border-main: #8c8e98;
+    --color-border-thin: #edf1f1;
 }
+
+@layer base {
+    :root {
+        font-family: IBM Plex Sans;
+        font-weight: 400;
+        color: var(--color-text-main);
+    }
+    li {
+        list-style: none;
+    }
+}
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities);
