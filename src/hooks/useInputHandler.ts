@@ -2,8 +2,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Eq } from '../function/eq';
 
-type InputState<T extends string | object> = T extends string ? string : Extract<T, object>;
-export const useInputHandler = <T extends string | object>(initialState: InputState<T>) => {
+type InputState<T extends string | number | object> = T extends string ? string : T extends number ? number : Extract<T, object>;
+export const useInputHandler = <T extends string | number | object>(initialState: InputState<T>) => {
     const [state, setState] = useState(initialState);
     const initNameKeys = useMemo(() => (typeof initialState === 'object' ? Object.keys(initialState) : null), [initialState]);
 
@@ -25,17 +25,20 @@ export const useInputHandler = <T extends string | object>(initialState: InputSt
                     return setState(event.target.value as typeof initialState);
                 }
 
-                // if (typeof initialState === 'number') {
-                //     const value = Number.isNaN(event.target.value) ? 0 : parseInt(event.target.value);
-                //     return setState(value as typeof initialState);
-                // }
+                if (typeof initialState === 'number') {
+                    if (isNaN(Number(event.target.value))) return;
+                    return setState(Number(event.target.value) as typeof state);
+                }
 
                 if (typeof initialState === 'object') {
-                    const { value, name } = event.target;
+                    const name = event.target.name as keyof typeof state & string;
+                    const value = event.target.value;
 
                     if (!initNameKeys!.find((key) => key === name))
                         throw Error(`initialState와 일치하는 input.name = ${name} 이 없습니다.`);
-                    return setState((prev) => ({ ...(prev as typeof initialState), [name]: value }));
+                    return setState((prev) => {
+                        return { ...(prev as typeof initialState), [name]: value };
+                    });
                 }
             }
 

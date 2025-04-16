@@ -1,3 +1,3 @@
-import { Main } from './main';
-
-export { Main };
+export * from './main';
+export * from './view-transition';
+export * from './dialog';

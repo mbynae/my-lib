@@ -1,0 +1,34 @@
+._popoverBtn {
+    /* anchor-name: --popover-anchor; */
+}
+
+._popover:popover-open {
+    opacity: 1;
+}
+
+._popover {
+    /* position-anchor: --popover-anchor; */
+    position: absolute;
+    left: anchor(0%);
+    top: anchor(top);
+    translate: 0 -110%;
+    opacity: 0;
+    transition:
+        opacity 0.15s,
+        display 0.15s allow-discrete,
+        overlay 0.15s allow-discrete;
+}
+
+@starting-style {
+    ._popover:popover-open {
+        opacity: 0;
+    }
+}
+
+._popover {
+    padding: 10px 15px;
+    background-color: #212121;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 14px;
+}

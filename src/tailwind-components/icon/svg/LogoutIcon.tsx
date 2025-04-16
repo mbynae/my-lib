@@ -1,6 +1,6 @@
 import { SvgProps } from '../icon-type';
 
-const LogoutIcon = ({ color = '#0F2B71' }: SvgProps) => {
+const LogoutIcon = ({ color = '#000' }: SvgProps) => {
     return (
         <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path

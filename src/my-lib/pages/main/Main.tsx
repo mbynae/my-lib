@@ -5,7 +5,7 @@ import MainLayout from '../../shared/components/layout/MainLayout';
 const Main = () => {
     return (
         <div className="flex">
-            <Aside></Aside>
+            <Aside />
             <MainLayout>
                 <Outlet />
             </MainLayout>

@@ -1,39 +1,32 @@
-import { useState } from 'react';
-import Button from '../../../../tailwind-components/button/Button';
-import { useQuery } from '@tanstack/react-query';
-import { callExampleQuery, useCallExampleQuery, useExampleMutate } from '../../../../api/hook/useExampleQuery';
+import { useLocation } from 'react-router';
+import { menuList } from '../../../../menuList';
 
 interface Props {
     children: React.ReactNode;
 }
 const MainLayout = ({ children }: Props) => {
-    // const [id, setId] = useState('');
+    const location = useLocation();
+    const title = getTitme(location.pathname.split('/').filter(Boolean));
 
-    // const { data, isError, error } = useQuery({
-    //     ...callExampleQuery({ id: id }),
-    //     enabled: !!id,
-    // });
-
-    // const { data: exData } = useCallExampleQuery({ id: 'ud' }, { enabled: false });
-
-    // const { mutate } = useExampleMutate({ gcTime: 0 });
-
-    // // console.log(isError ? error : data);
-    // const onPostEvent = (id: string) => {
-    //     mutate(
-    //         { id: id },
-    //         {
-    //             onSuccess: (data) => {
-    //                 console.log(data);
-    //             },
-    //             onError: (error) => {
-    //                 console.log(error);
-    //             },
-    //         },
-    //     );
-    // };
-
-    return <main className="bg-theme-thin w-full">{children}</main>;
+    return (
+        <main className="bg-theme-thin box-border w-full px-7.5 pt-10">
+            <section className="mb-5 flex items-center justify-between">
+                <header>
+                    <h1 className="text-[2rem] font-semibold">{title.title}</h1>
+                    <h2 className="text-font-gray font-semibold">{title.subTitle}</h2>
+                </header>
+                <div></div>
+            </section>
+            <section className="box-border min-h-[800px] w-full rounded-2xl bg-white px-10 py-9">{children}</section>
+        </main>
+    );
 };
 
 export default MainLayout;
+
+const getTitme = (pathArr: string[]) => {
+    const title = menuList.find((menu) => menu.path === pathArr[0]);
+    const subTitle = title?.children.find((sub) => sub.link === pathArr[1]);
+
+    return { title: title?.title ?? 'Dashboard', subTitle: subTitle?.description ?? '' };
+};

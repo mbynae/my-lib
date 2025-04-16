@@ -1,16 +1,16 @@
-import { Link, useLocation } from 'react-router';
-import Icon from '../../../../tailwind-components/icon/Icon';
-import { useBooleanHandler, useInputHandler } from '../../../../hooks/useInputHandler';
-import { CSSProperties, useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router';
+import { useEffect, useState } from 'react';
 import { classNames } from '../../../../function/className';
-import { IconProps } from '../../../../tailwind-components/icon/icon-type';
+import { menuList } from '../../../../menuList';
+
+import Icon from '../../../../tailwind-components/icon/Icon';
+import type { IconProps } from '../../../../tailwind-components/icon/icon-type';
 
 const Menu = () => {
     const location = useLocation();
 
     const pathArr = location.pathname.split('/');
     const mainMenu = pathArr?.[1];
-    const subMenu = pathArr?.[2];
 
     const [toggle, setToggle] = useState(mainMenu);
 
@@ -29,18 +29,15 @@ const Menu = () => {
 
     return (
         <nav>
-            <List name="view-transition" title="View Transition" toggle={toggle} icon="transition" setToggle={onToggleMenu}>
-                <LinkButton parent="view-transition" link="cross-fade" subMenu={subMenu}>
-                    Cross-Fade Page Transition
-                </LinkButton>
-                <LinkButton parent="view-transition" link="dynamic-card" subMenu={subMenu}>
-                    Dynamic Card Row Transition
-                </LinkButton>
-                <LinkButton parent="view-transition" link="zoom-in-out" subMenu={subMenu}>
-                    Zoom-in-out Image to Page Transition
-                </LinkButton>
-            </List>
-            <List name="carousel" title="Carousel Animation" icon="cart" toggle={toggle} setToggle={onToggleMenu}></List>
+            {menuList.map((menu) => (
+                <List key={menu.path} name={menu.path} title={menu.title} toggle={toggle} icon={menu.icon} setToggle={onToggleMenu}>
+                    {menu.children.map((sub) => (
+                        <LinkButton key={sub.link} parent={menu.path} link={sub.link}>
+                            {sub.subTitle}
+                        </LinkButton>
+                    ))}
+                </List>
+            ))}
         </nav>
     );
 };
@@ -73,17 +70,16 @@ interface LinkProps {
     children: React.ReactNode;
     parent: string;
     link: string;
-    subMenu?: string;
 }
-const LinkButton = ({ children, parent, link, subMenu }: LinkProps) => {
-    const className = 'font-bold text-theme-main';
+const LinkButton = ({ children, parent, link }: LinkProps) => {
     return (
-        <Link
+        <NavLink
             to={'/' + parent + '/' + link}
-            className={classNames('text-text-thin mb-2 block pl-4 text-sm first-of-type:mt-2.5', subMenu === link ? className : '')}
+            className="text-text-thin mb-2 block pl-4 text-sm first-of-type:mt-2.5"
+            style={({ isActive }) => (isActive ? { fontWeight: 700, color: 'var(--color-theme-main)' } : { subTitle: children })}
         >
             {children}
-        </Link>
+        </NavLink>
     );
 };
 

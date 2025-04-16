@@ -13,27 +13,4 @@ export interface SvgProps {
 }
 
 //svg 컴포넌트 이름과 동일하게 (앞글자 대소문자 구분없음)
-type IconType =
-    | 'setting'
-    | 'arrow'
-    | 'search'
-    | 'home'
-    | 'searchDetail'
-    | 'cart'
-    | 'notice'
-    | 'logout'
-    | 'refresh'
-    | 'searchIcon'
-    | 'locker'
-    | 'modify'
-    | 'group'
-    | 'exel'
-    | 'directionArrow'
-    | 'children'
-    | 'adult'
-    | 'online'
-    | 'offline'
-    | 'reverse_Arrow'
-    | 'check'
-    | 'listEmpty'
-    | 'transition';
+type IconType = 'arrow' | 'logout' | 'check' | 'home' | 'directionArrow' | 'transition' | 'carousel' | 'dialog' | 'popover';

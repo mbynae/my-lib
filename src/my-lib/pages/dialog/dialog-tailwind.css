@@ -1,0 +1,74 @@
+@import 'tailwindcss';
+
+@layer components {
+    .dialog-default {
+        --dialog-duration: 0.25s;
+        position: fixed;
+        left: 50%;
+        top: calc(50% + 50px);
+        translate: -50% -50%;
+        opacity: 0;
+        box-shadow: 0 0 0 1px rgba(174, 174, 174, 0.1);
+        border-radius: 10px;
+        box-sizing: border-box;
+
+        transition:
+            opacity var(--dialog-duration) ease-in-out,
+            top var(--dialog-duration) ease-in-out,
+            display var(--dialog-duration) ease-in-out allow-discrete,
+            overlay var(--dialog-duration) ease-in-out allow-discrete;
+
+        ._inner {
+            min-width: 300px;
+            background-color: #fff;
+            padding: 10px 15px 15px 15px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+
+            ._title {
+                font-size: 20px;
+                margin-bottom: 5px;
+            }
+
+            ._buttonBox {
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+
+                & button {
+                    width: 80px;
+                }
+            }
+        }
+
+        &:open {
+            opacity: 1;
+            top: 50%;
+        }
+
+        &::backdrop {
+            background-color: rgb(0 0 0 / 0%);
+            transition:
+                display var(--dialog-duration) allow-discrete,
+                overlay var(--dialog-duration) allow-discrete,
+                background-color var(--dialog-duration);
+        }
+
+        &:open::backdrop {
+            background-color: rgb(0 0 0 / 25%);
+        }
+
+        @starting-style {
+            &:open {
+                opacity: 0;
+                top: calc(50% + 50px);
+            }
+
+            &:open::backdrop {
+                background-color: rgb(0 0 0 / 0%);
+            }
+        }
+    }
+}

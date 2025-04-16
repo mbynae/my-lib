@@ -1,20 +1,98 @@
-import { Route, Routes } from 'react-router';
+import { createBrowserRouter, Navigate, Params, RouterProvider } from 'react-router';
+import CrossFadeContents from './my-lib/domain/view-transition/crossFadePage/CrossFadeContents';
 import * as Pages from './my-lib/pages/index';
 
+const router = createBrowserRouter([
+    {
+        path: '',
+        element: <Pages.Main />,
+        children: [
+            {
+                path: 'view-transition',
+                children: [
+                    {
+                        path: 'cross-fade',
+                        element: <Pages.CrossFadePage />,
+                        children: [
+                            {
+                                path: ':id',
+                                element: <CrossFadeContents />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'dynamic-card',
+                        element: <div>dynamic-card</div>,
+                    },
+                    {
+                        path: 'zoom-in-out',
+                        element: <div>zoom-in-out</div>,
+                    },
+                ],
+            },
+            {
+                path: 'dialog',
+                children: [
+                    {
+                        path: 'showModal',
+                        children: [
+                            {
+                                index: true,
+                                element: <Navigate to="1" replace />,
+                            },
+                            {
+                                path: ':id',
+                                element: <Pages.ShowModalDialogPage />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'alert',
+                        children: [
+                            {
+                                index: true,
+                                element: <Navigate to="1" replace />,
+                            },
+                            {
+                                path: ':id',
+                                element: <Pages.AlertDialogPage />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'mobile',
+                        children: [
+                            {
+                                index: true,
+                                element: <Navigate to="1" replace />,
+                            },
+                            {
+                                path: ':id',
+                                element: <Pages.MobileDialogPage />,
+                            },
+                        ],
+                    },
+                    {
+                        path: 'popover',
+                        children: [
+                            {
+                                index: true,
+                                element: <Navigate to="1" replace />,
+                            },
+                            {
+                                path: ':id',
+                                element: <Pages.PopoverPage />,
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
+]);
+
 const Router = () => {
-    return (
-        <Routes>
-            <Route path="" element={<Pages.Main />}>
-                <Route path="view-transition">
-                    <Route path="cross-fade" element={<div>cross-fade</div>}></Route>
-                    <Route path="dynamic-card" element={<div>dynamic-card</div>}></Route>
-                    <Route path="zoom-in-out" element={<div>zoom-in-out</div>}></Route>
-                </Route>
-            </Route>
-            {/* <Route path="slide" element={<App />} />
-            <Route path="drag" element={<App2 />} /> */}
-        </Routes>
-    );
+    return <RouterProvider router={router} />;
 };
 
 export default Router;
